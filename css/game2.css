@@ -1,0 +1,470 @@
+#top {
+  background-image: url("../assets/images/sky2.png");
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  width: 1400px;
+  height: 530px;
+  background-size: 100% 70%;
+}
+
+#bottom{
+  background-image: url("../assets/images/grass.jpg");
+  background-repeat: repeat;
+  background-attachment: fixed;
+  top: 450px;
+  width: 1400px;
+  height: 190px;
+  background-size: 20% 48%;
+}
+
+.dropdown{
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #b9eaff;
+  min-width: 550px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  padding: 12px 16px;
+  z-index: 1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+#d1{
+  width: 550px;
+}
+
+#d2{
+  width: 850px;
+}
+
+#pricing {
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+border-collapse: collapse;
+font-size: 14px;
+}
+
+#pricing td, #pricing th {
+border: 1px solid #ddd;
+padding: 8px;
+}
+
+#pricing tr:{background-color: #f2f2f2;}
+
+#pricing tr:hover {background-color: #ddd;}
+
+#pricing th {
+padding-top: 12px;
+padding-bottom: 12px;
+text-align: left;
+background-color: #A4A8FA;
+color: black;
+}
+
+input[type=number] {
+width: 65px;
+padding: 2px 2px;
+box-sizing: border-box;
+}
+
+
+.report_button {
+border: 2px;
+background-color: #668FF5;
+padding: 2px 2px;
+font-size: 14px;
+font-weight: bold;
+cursor: pointer;
+display: inline-block;
+}
+
+.report_button:hover {background: #eee;}
+
+#hour{
+  position:absolute;
+  left:700px;
+  top:10px;
+  font-size: 20px;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  color:black;
+  border-style: solid;
+  border-width: 1px;
+  background-color: #ddd;
+}
+
+#Next_button{
+  position:absolute;
+  left:765px;
+  top:210px;
+}
+
+#Overall{
+position:absolute;
+left:520px;
+top:100px;
+font-size: 14px;
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+border-collapse: collapse;
+}
+
+#Overall td, #Overall th {
+border: 1px solid #ddd;
+padding: 4px;
+}
+
+#Overall tr:{background-color: #f2f2f2;}
+
+#Overall tr:hover {background-color: #ddd;}
+
+#Overall th {
+padding-top: 2px;
+padding-bottom: 2px;
+text-align: left;
+background-color: #A4A8FA;
+color: black;
+}
+
+.tool_button{
+  border: 2px;
+  background-color: #668FF5;
+  padding: 7px 14px;
+  font-size: 16px;
+  cursor: pointer;
+  display: inline-block;
+}
+.tool_button:hover {background: #eee;}
+
+
+#compare {
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+border-collapse: collapse;
+font-size: 14px;
+}
+
+#compare td, #compare th {
+border: 1px solid #ddd;
+padding: 8px;
+}
+
+#compare tr:{background-color: #f2f2f2;}
+
+#compare tr:hover {background-color: #ddd;}
+
+#compare th {
+padding-top: 12px;
+padding-bottom: 12px;
+text-align: left;
+background-color: #8285C2;
+color: black;
+}
+
+
+#time{
+  position: absolute;
+  left: 40%;
+  top: .5%;
+}
+
+#time-display{
+  position: absolute;
+  left: 47%;
+  top: 5%;
+  font-size: 32px;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  text-shadow: 3px 2px 2px lightblue;
+}
+
+a{
+  position: absolute;
+  left: 1300px;
+  top: 10px;
+}
+
+#road{
+  position: absolute;
+  left: 0px;
+  top: 480px;
+}
+
+#bush{
+  position: absolute;
+  left: 0px;
+  top: 362px;
+}
+#bush2{
+  position: absolute;
+  left: 400px;
+  top: 362px;
+}
+#bush3{
+  position: absolute;
+  left: 750px;
+  top: 362px;
+}
+#bush4{
+  position: absolute;
+  left: 1000px;
+  top: 362px;
+}
+
+  /* Popup container - can be anything you want */
+  .popup1 {
+    position: absolute;
+    left: 1%;
+    top: 31%;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* The actual popup */
+  .popup1 .popuptext1 {
+    visibility: hidden;
+    width: 250px;
+    background-color: #555;
+    color: #fff;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 30%;
+    margin-left: -40px;
+  }
+
+  /* Popup arrow */
+  .popup1 .popuptext1::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+
+  /* Toggle this class - hide and show the popup */
+  .popup1 .show1 {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+
+  /* Popup container - can be anything you want */
+  .popup2 {
+    position: absolute;
+    left: 18%;
+    top: 31%;
+    display: inline-block;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* The actual popup */
+  .popup2 .popuptext2 {
+    visibility: hidden;
+    width: 250px;
+    background-color: #555;
+    color: #fff;
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    text-align: center;
+    border-radius: 6px;
+    padding: 8px 0;
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 30%;
+    margin-left: -40px;
+  }
+
+  /* Popup arrow */
+  .popup2 .popuptext2::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #555 transparent transparent transparent;
+  }
+
+  /* Toggle this class - hide and show the popup */
+  .popup2 .show2 {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s;
+  }
+
+/* Popup container - can be anything you want */
+.popup3 {
+  position: absolute;
+  left: 35%;
+  top: 31%;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup3 .popuptext3 {
+  visibility: hidden;
+  width: 250px;
+  background-color: #555;
+  color: #fff;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 30%;
+  margin-left: -40px;
+}
+
+/* Popup arrow */
+.popup3 .popuptext3::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup3 .show3 {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+
+/* Popup container - can be anything you want */
+.popup {
+  position: absolute;
+  left: 60%;
+  top: 27%;
+  display: inline-block;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* The actual popup */
+.popup .popuptext {
+  visibility: hidden;
+  width: 250px;
+  background-color: #555;
+  color: #fff;
+  font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+  text-align: center;
+  border-radius: 6px;
+  padding: 8px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 100%;
+  left: 30%;
+  margin-left: -40px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #555 transparent transparent transparent;
+}
+
+/* Toggle this class - hide and show the popup */
+.popup .show {
+  visibility: visible;
+  -webkit-animation: fadeIn 1s;
+  animation: fadeIn 1s;
+}
+
+/* Add animation (fade in the popup) */
+@-webkit-keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+  from {opacity: 0;}
+  to {opacity:1 ;}
+}
+
+
+#car_cont {
+  position: relative;
+  top:265px;
+}
+
+#car{
+  position: absolute;
+  left: 0px;
+}
+
+
+.rectangle {
+height: 25px;
+width: 1200px;
+background-color: #B13E69;
+position: absolute;
+left: 55px;
+top: 610px;
+}
+
+.triangle-right {
+  position: absolute;
+  left: 1250px;
+  top: 597px;
+width: 0;
+height: 0;
+border-top: 25px solid transparent;
+border-left: 50px solid #B13E69;
+border-bottom: 25px solid transparent;
+}
+
+p{
+  text-shadow: 3px 2px 2px lightblue;
+  color: black;
+font-size: 20px;
+font-weight: bold;
+font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+position: absolute;
+top:90%;
+left:80px;
+word-spacing: 72px;
+}
+.select{
+background-color: #668FF5;
+}

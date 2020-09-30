@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="../css/content.css">
+  <link rel="stylesheet" href="../css/leaderboard.css">
+  <meta charset="UTF-8" />
+  <title>BW_Game</title>
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+  <script>
+
+AWS.config.update({
+region: "us-east-1",
+endpoint: "https://dynamodb.us-east-1.amazonaws.com",
+accessKeyId: "****",
+secretAccessKey: "****"
+});
+
+var docClient = new AWS.DynamoDB.DocumentClient();
+var j=0,k=0;
+var net_r = new Array(100);
+var details = new Array(200);
+var first,second,third,fourth,fifth;
+
+var params = {
+    TableName: "Users",
+    ScanIndexForward: false,
+};
+
+
+docClient.scan(params, onScan);
+
+function onScan(err, data) {
+    if (err) {
+        console.error("Unable to scan the table. Error JSON:", JSON.stringify(err, null, 2));
+    } else {
+        // print all the movies
+        console.log("Scan succeeded.");
+        data.Items.forEach(function(user) {
+          net_r[j]=user.net_rev;
+          details[k]=user.net_rev;
+          details[k+1]=user.propertyId;
+          j=j+1;
+          k=k+2;
+        });
+
+        // continue scanning if we have more movies, because
+        // scan can retrieve a maximum of 1MB of data
+        if (typeof data.LastEvaluatedKey != "undefined") {
+            console.log("Scanning for more...");
+            params.ExclusiveStartKey = data.LastEvaluatedKey;
+            docClient.scan(params, onScan);
+        }
+
+        net_r.sort(function(a, b){return a - b});
+        first=net_r[j-1];
+        document.getElementById("11").innerHTML=first;
+        second=net_r[j-2];
+        document.getElementById("22").innerHTML=second;
+        third=net_r[j-3];
+        document.getElementById("33").innerHTML=third;
+        fourth=net_r[j-4];
+        document.getElementById("44").innerHTML=fourth;
+        fifth=net_r[j-5];
+        document.getElementById("55").innerHTML=fifth;
+
+        for(var x=0;x<k;x++){
+          if(details[x]==first){
+            document.getElementById("1").innerHTML=details[x+1];
+          }else if (details[x]==second) {
+            document.getElementById("2").innerHTML=details[x+1];
+          }else if (details[x]==third) {
+            document.getElementById("3").innerHTML=details[x+1];
+          }else if (details[x]==fourth){
+            document.getElementById("4").innerHTML=details[x+1];
+          }else if (details[x]==fifth){
+            document.getElementById("5").innerHTML=details[x+1];
+          }
+        }
+      }
+}
+</script>
+</head>
+
+
+<body>
+<div id="whole" class="content">
+
+<h2>LEADER BOARD</h2>
+
+  <table id="Leaderboard">
+    <tr>
+      <th>Property ID</th>
+      <th>Net Revenue</th>
+      </tr>
+    <tr>
+      <td id="1"></td>
+      <td id="11"></td>
+    </tr>
+    <tr>
+      <td id="2"></td>
+      <td id="22"></td>
+    </tr>
+    <tr>
+      <td id="3"></td>
+      <td id="33"></td>
+    </tr>
+    <tr>
+      <td id="4"></td>
+      <td id="44"></td>
+    </tr>
+    <tr>
+      <td id="5"></td>
+      <td id="55"></td>
+    </tr>
+  </table>
+
+<a href="../Run.html">
+<img border="0" alt="Next" src="../assets/images/gamequit.png" width="165" height="125">
+</a>
+
+</div>
+</body>
+</html>

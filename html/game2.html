@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="../css/content.css">
+  <link rel="stylesheet" href="../css/game2.css">
+  <meta charset="UTF-8" />
+  <title>BW_Game</title>
+<style>
+#star{
+  position: absolute;
+  left: 60px;
+  top: 575px;
+}
+</style>
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+
+</head>
+
+
+<body onload="initial()">
+  <div id="whole">
+    <script>
+    function startTimer(duration, display) {
+        var timer = duration, minutes, seconds;
+        setInterval(function () {
+            minutes = parseInt(timer / 60, 10);
+            seconds = parseInt(timer % 60, 10);
+
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            display.textContent = minutes + ":" + seconds;
+
+            if (--timer < 0) {
+                timer = duration;
+            }
+        }, 1000);
+    }
+
+    function countdown(){
+      var fiveMinutes = 60 * 15,
+          display = document.querySelector('#time-display');
+      startTimer(fiveMinutes, display);
+    }
+  </script>
+
+    <script>
+    var myVar;
+    var i=0;
+    var array = ["6am","8am","10am","12pm","2pm","4pm","6pm","8pm","10pm","12pm"];
+    var num = [6,8,10,12,14,16,18,20,22,24];
+    var King_Rack,King_Last,King_Opaque,King_Gov;
+    var Queen_Rack,Queen_Last,Queen_Opaque,Queen_Gov;
+    var Suite_Rack,Suite_Last,Suite_Opaque,Suite_Gov;
+    var car_position=420;
+    var K_rack_rev,Q_rack_rev,S_rack_rev,E_rack_rev,K_last_rev,Q_last_rev,S_last_rev,E_last_rev,K_opaque_rev,Q_opaque_rev,S_opaque_rev,E_opaque_rev,K_gov_rev,Q_gov_rev,S_gov_rev,E_gov_rev;
+    var K_tr,K_nr,K_ts,K_adr,Q_tr,Q_nr,Q_ts,Q_adr,S_tr,S_nr,S_ts,S_adr,E_tr,E_nr,E_ts,E_adr;
+
+
+    function initial(){
+       countdown();
+       sethour();
+       fifteen();
+     }
+
+    function sethour(){
+      sessionStorage.setItem("MyHour", array[i]);
+      console.log(sessionStorage.getItem("MyHour"));
+      sessionStorage.setItem("MyHour_num", num[i]);
+      console.log(sessionStorage.getItem("MyHour_num"));
+      i=i+1;
+      console.log(i);
+      if(i==10){
+        document.getElementById("cont").disabled = true;
+        document.getElementById("update").disabled = true;
+      }
+    }
+
+    function fifteen() {
+      myVar = setTimeout(alertFunc, 900000);
+    }
+
+    function alertFunc() {
+      window.location.href ="timeup.html"
+    }
+
+    function move_car(){
+      var elem = document.getElementById("car");
+      var pos = 0;
+      var id = setInterval(frame, 5);
+      function frame() {
+        if (pos == 550) {
+          clearInterval(id);
+        } else {
+          pos++;
+          elem.style.left = pos + "px";
+        }
+      }
+    }
+    </script>
+
+  <div id='top'>
+    <div class="dropdown">
+      <img id="toolbox" border="0" alt="toolbox" src="../assets/images/toolbox.png" width="150" height="150"></img>
+      <div id="d1" class="dropdown-content">
+
+
+    <table id="pricing">
+      <tr>
+        <th></th>
+        <th><label><b>Rack</b></label>
+       <select id="RLrack" class="select">
+          <option value="OPEN">OPEN</option>
+          <option value="CLOSE">CLOSE</option>
+        </select></th>
+        <th><label><b>Last Minute (10%)</b></label>
+       <select id="RLlast" class="select">
+          <option value="OPEN">OPEN</option>
+          <option value="CLOSE">CLOSE</option>
+        </select></th>
+        <th><label><b>Opaque (35%)</b></label>
+        <select id="RLopaque" class="select">
+          <option value="OPEN">OPEN</option>
+          <option value="CLOSE">CLOSE</option>
+        </select></th>
+        <th><label><b>Government ($96)</b></label>
+          <select id="RLgov" class="select">
+          <option value="OPEN">OPEN</option>
+          <option value="CLOSE">CLOSE</option>
+        </select></th>
+      </tr>
+      <tr>
+        <th>King</th>
+        <td><input type="number" id="K_rack"></td>
+        <td id="K_last"></td>
+        <td id="K_opaque"></td>
+        <td id="K_gov"></td>
+      </tr>
+      <tr>
+        <th>QQ</th>
+        <td><input type="number" id="Q_rack"></td>
+        <td id="Q_last"></td>
+        <td id="Q_opaque"></td>
+        <td id="Q_gov"></td>
+      </tr>
+      <tr>
+        <th>Suite QQ</th>
+        <td><input type="number" id="S_rack"></td>
+        <td id="S_last"></td>
+        <td id="S_opaque"></td>
+        <td id="S_gov"></td>
+      </tr>
+
+    </table><br>
+    <button id="update" class=tool_button type=button onclick="toolbox()">Update Rates</button>
+
+    <script>
+    function toolbox(){
+      King_Rack=document.getElementById("K_rack").value;
+      Queen_Rack=document.getElementById('Q_rack').value;
+      Suite_Rack=document.getElementById('S_rack').value;
+
+    if((document.getElementById('RLrack').value)=="OPEN")
+    {
+    if((document.getElementById('RLlast').value)=="OPEN")
+    {
+      King_Last=(King_Rack-(King_Rack*0.1)).toFixed(2);
+      Queen_Last=(Queen_Rack-(Queen_Rack*0.1)).toFixed(2);
+      Suite_Last=(Suite_Rack-(Suite_Rack*0.1)).toFixed(2);
+      document.getElementById('K_last').innerHTML= "$"+King_Last;
+      document.getElementById('Q_last').innerHTML= "$"+Queen_Last;
+      document.getElementById('S_last').innerHTML= "$"+Suite_Last;
+    }
+    else
+    {
+      King_Last=Queen_Last=Suite_Last="NA";
+      document.getElementById('K_last').innerHTML="NA";
+      document.getElementById('Q_last').innerHTML="NA";
+      document.getElementById('S_last').innerHTML="NA";
+    }
+
+    if((document.getElementById('RLopaque').value)=="OPEN")
+    {
+      King_Opaque=(King_Rack-(King_Rack*0.35)).toFixed(2);
+      Queen_Opaque=(Queen_Rack-(Queen_Rack*0.35)).toFixed(2);
+      Suite_Opaque=(Suite_Rack-(Suite_Rack*0.35)).toFixed(2);
+      document.getElementById('K_opaque').innerHTML= "$"+King_Opaque;
+      document.getElementById('Q_opaque').innerHTML= "$"+Queen_Opaque;
+      document.getElementById('S_opaque').innerHTML= "$"+Suite_Opaque;
+    }
+    else
+    {
+      King_Opaque=Queen_Opaque=Suite_Opaque="NA";
+      document.getElementById('K_opaque').innerHTML= "NA";
+      document.getElementById('Q_opaque').innerHTML= "NA";
+      document.getElementById('S_opaque').innerHTML= "NA";
+    }
+
+    if((document.getElementById('RLgov').value)=="OPEN")
+    {
+      King_Gov=Queen_Gov=Suite_Gov=96;
+      document.getElementById('K_gov').innerHTML= "$"+96;
+      document.getElementById('Q_gov').innerHTML= "$"+96;
+      document.getElementById('S_gov').innerHTML= "$"+96;
+    }
+    else
+    {
+      King_Gov=Queen_Gov=Suite_Gov="NA";
+      document.getElementById('K_gov').innerHTML= "NA";
+      document.getElementById('Q_gov').innerHTML= "NA";
+      document.getElementById('S_gov').innerHTML= "NA";
+    }
+  }else{
+    King_Rack=Queen_Rack=Suite_Rack="NA";
+    document.getElementById('K_gov').innerHTML= "NA";
+    document.getElementById('Q_gov').innerHTML= "NA";
+    document.getElementById('S_gov').innerHTML= "NA";
+    King_Last=Queen_Last=Suite_Last="NA";
+    document.getElementById('K_last').innerHTML="NA";
+    document.getElementById('Q_last').innerHTML="NA";
+    document.getElementById('S_last').innerHTML="NA";
+    King_Opaque=Queen_Opaque=Suite_Opaque="NA";
+    document.getElementById('K_opaque').innerHTML= "NA";
+    document.getElementById('Q_opaque').innerHTML= "NA";
+    document.getElementById('S_opaque').innerHTML= "NA";
+    King_Gov=Queen_Gov=Suite_Gov="NA";
+    document.getElementById('K_rack').innerHTML= "NA";
+    document.getElementById('Q_rack').innerHTML= "NA";
+    document.getElementById('S_rack').innerHTML= "NA";
+
+  }
+  }
+    </script>
+
+
+    <button id="cont" class=tool_button type="button" onclick="start()">Continue</button>
+
+    <script type="text/javascript" src="../lib/axios/dist/axios.standalone.js"></script>
+    <script type="text/javascript" src="../lib/CryptoJS/rollups/hmac-sha256.js"></script>
+    <script type="text/javascript" src="../lib/CryptoJS/rollups/sha256.js"></script>
+    <script type="text/javascript" src="../lib/CryptoJS/components/hmac.js"></script>
+    <script type="text/javascript" src="../lib/CryptoJS/components/enc-base64.js"></script>
+    <script type="text/javascript" src="../lib/url-template/url-template.js"></script>
+    <script type="text/javascript" src="../lib/apiGatewayCore/sigV4Client.js"></script>
+    <script type="text/javascript" src="../lib/apiGatewayCore/apiGatewayClient.js"></script>
+    <script type="text/javascript" src="../lib/apiGatewayCore/simpleHttpClient.js"></script>
+    <script type="text/javascript" src="../lib/apiGatewayCore/utils.js"></script>
+    <script type="text/javascript" src="../apigClient.js"></script>
+
+    <script>
+
+      function start(){
+          save_price();
+          report();
+          move_car();
+          move_star();
+          sethour();
+      }
+
+      function move_star(){
+        var array2 = ["145px","181px","308px","430px","558px","680px","795px","915px","1035px","1161px"];
+        document.getElementById("star").style.left = array2[i];
+      }
+
+      function save_price(){
+
+        var docClient = new AWS.DynamoDB.DocumentClient();
+        var the_email = sessionStorage.getItem("User_email");
+        console.log(sessionStorage.getItem("User_email"));
+        var the_time = Number(sessionStorage.getItem("MyHour_num"));
+        King_Rack=Number(King_Rack);
+        King_Last=Number(King_Last);
+        King_Opaque=Number(King_Opaque);
+        King_Gov=Number(King_Gov);
+        Queen_Rack=Number(Queen_Rack);
+        Queen_Last=Number(Queen_Last);
+        Queen_Opaque=Number(Queen_Opaque);
+        Queen_Gov=Number(Queen_Gov);
+        Suite_Rack=Number(Suite_Rack);
+        Suite_Last=Number(Suite_Last);
+        Suite_Opaque=Number(Suite_Opaque);
+        Suite_Gov=Number(Suite_Gov);
+
+        var apigClient = apigClientFactory.newClient();
+
+        var apigClient = apigClientFactory.newClient({
+          accessKey: '****',
+          secretKey: '****',
+        });
+
+        var body = {
+
+            "email": the_email,
+            "gametime": the_time,
+            "K_rack_Price": King_Rack,
+            "K_last_Price": King_Last,
+            "K_opaque_Price": King_Opaque,
+            "K_gov_Price": King_Gov,
+            "Q_rack_Price": Queen_Rack,
+            "Q_last_Price": Queen_Last,
+            "Q_opaque_Price": Queen_Opaque,
+            "Q_gov_Price": Queen_Gov,
+            "S_rack_Price": Suite_Rack,
+            "S_last_Price": Suite_Last,
+            "S_opaque_Price": Suite_Opaque,
+            "S_gov_Price": Suite_Gov
+          };
+
+
+apigClient.gamedataPost(body)
+    .then(function(result){
+      console.log("Submitted successfully");
+    }).catch( function(result){
+        console.log("error occurred");
+    });
+
+      }
+
+      function report(){
+        document.getElementById("hour").innerHTML=sessionStorage.getItem("MyHour");
+        update_table1();
+      }
+
+      function update_table1(){
+        document.getElementById("rb1").addEventListener("click", () => {
+          document.getElementById("t1-11").innerHTML="$"+King_Rack;
+          document.getElementById("t1-21").innerHTML="$"+King_Last;
+          document.getElementById("t1-31").innerHTML="$"+King_Opaque;
+          document.getElementById("t1-41").innerHTML="$"+King_Gov;
+          calc();
+          document.getElementById("t1-13").innerHTML="$"+K_rack_rev;
+          document.getElementById("t1-23").innerHTML="$"+K_last_rev;
+          document.getElementById("t1-33").innerHTML="$"+K_opaque_rev;
+          document.getElementById("t1-43").innerHTML="$"+K_gov_rev;
+
+          document.getElementById("tr").innerHTML="$"+K_tr;
+        });
+        document.getElementById("rb2").addEventListener("click", () => {
+          document.getElementById("t1-11").innerHTML="$"+Queen_Rack;
+          document.getElementById("t1-21").innerHTML="$"+Queen_Last;
+          document.getElementById("t1-31").innerHTML="$"+Queen_Opaque;
+          document.getElementById("t1-41").innerHTML="$"+Queen_Gov;
+          calc();
+          document.getElementById("t1-13").innerHTML="$"+Q_rack_rev;
+          document.getElementById("t1-23").innerHTML="$"+Q_last_rev;
+          document.getElementById("t1-33").innerHTML="$"+Q_opaque_rev;
+          document.getElementById("t1-43").innerHTML="$"+Q_gov_rev;
+
+          document.getElementById("tr").innerHTML="$"+Q_tr;
+        });
+        document.getElementById("rb3").addEventListener("click", () => {
+          document.getElementById("t1-11").innerHTML="$"+Suite_Rack;
+          document.getElementById("t1-21").innerHTML="$"+Suite_Last;
+          document.getElementById("t1-31").innerHTML="$"+Suite_Opaque;
+          document.getElementById("t1-41").innerHTML="$"+Suite_Gov;
+          calc();
+          document.getElementById("t1-13").innerHTML="$"+S_rack_rev;
+          document.getElementById("t1-23").innerHTML="$"+S_last_rev;
+          document.getElementById("t1-33").innerHTML="$"+S_opaque_rev;
+          document.getElementById("t1-43").innerHTML="$"+S_gov_rev;
+
+          document.getElementById("tr").innerHTML="$"+S_tr;
+        });
+        document.getElementById("rb4").addEventListener("click", () => {
+          document.getElementById("t1-11").innerHTML="$"+King_Rack+"/$"+Queen_Rack+"/$"+Suite_Rack;
+          document.getElementById("t1-21").innerHTML="$"+King_Last+"/$"+Queen_Last+"/$"+Suite_Last;
+          document.getElementById("t1-31").innerHTML="$"+King_Opaque+"/$"+Queen_Opaque+"/$"+Suite_Opaque;
+          document.getElementById("t1-41").innerHTML="$"+King_Gov+"/$"+Queen_Gov+"/$"+Suite_Gov;
+          calc();
+          document.getElementById("t1-13").innerHTML="$"+E_rack_rev;
+          document.getElementById("t1-23").innerHTML="$"+E_last_rev;
+          document.getElementById("t1-33").innerHTML="$"+E_opaque_rev;
+          document.getElementById("t1-43").innerHTML="$"+E_gov_rev;
+
+          document.getElementById("tr").innerHTML="$"+E_tr;
+        });
+      }
+
+
+
+      function calc(){
+        if(King_Rack=="NA"){
+          K_rack_rev=Q_rack_rev=S_rack_rev=E_rack_rev=0;
+        }else{
+          K_rack_rev=King_Rack*2;
+          Q_rack_rev=Queen_Rack*1;
+          S_rack_rev=Suite_Rack*1;
+          E_rack_rev=K_rack_rev+Q_rack_rev+S_rack_rev;
+        }
+        if(King_Last=="NA"){
+          K_last_rev=Q_last_rev=S_last_rev=E_last_rev=0;
+        }else{
+          K_last_rev=King_Last*2;
+          Q_last_rev=Queen_Last*1;
+          S_last_rev=Suite_Last*1;
+          E_last_rev=K_last_rev+Q_last_rev+S_last_rev;
+        }
+        if(King_Opaque=="NA"){
+          K_opaque_rev=Q_opaque_rev=S_opaque_rev=E_opaque_rev=0;
+        }else{
+          K_opaque_rev=King_Opaque*2;
+          Q_opaque_rev=Queen_Opaque*1;
+          S_opaque_rev=Suite_Opaque*1;
+          E_opaque_rev=K_opaque_rev+Q_opaque_rev+S_opaque_rev;
+        }
+        if(King_Gov=="NA"){
+          K_gov_rev=Q_gov_rev=S_gov_rev=E_gov_rev=0;
+        }else{
+          K_gov_rev=King_Gov*2;
+          Q_gov_rev=Queen_Gov*1
+          S_gov_rev=Suite_Gov*1;
+          E_gov_rev=K_gov_rev+Q_gov_rev+S_gov_rev;
+        }
+        K_tr=K_rack_rev+K_last_rev+K_opaque_rev+K_gov_rev;
+        Q_tr=Q_rack_rev+Q_last_rev+Q_opaque_rev+Q_gov_rev;
+        S_tr=S_rack_rev+S_last_rev+S_opaque_rev+S_gov_rev;
+        E_tr=E_rack_rev+E_last_rev+E_opaque_rev+E_gov_rev;
+      }
+
+    </script>
+      </div>
+    </div>
+
+    <div class="dropdown">
+      <img id="report" border="0" alt="report" src="../assets/images/report.png" width="150" height="150"></img>
+      <div id ="d2" class="dropdown-content">
+
+        <button id="rb1" class=report_button> KING (40 Total)</button>
+        <button id="rb2" class=report_button> QQ (30 Total)</button>
+        <button id="rb3" class=report_button> SUITE QQ (10 Total)</button>
+        <button id="rb4" class=report_button> ENTIRE HOTEL</button><br>
+        <br>
+
+    <table id="pricing">
+      <tr>
+        <th>Rate Plan</th>
+        <th>Current Rate</th>
+        <th>#Sold</th>
+        <th>Revenue</th>
+      </tr>
+      <tr>
+        <th>Rack</th>
+        <td id="t1-11"></td>
+        <td id="t1-12"></td>
+        <td id="t1-13"></td>
+      </tr>
+      <tr>
+        <th>Last Min 10%</th>
+        <td id="t1-21"></td>
+        <td id="t1-22"></td>
+        <td id="t1-23"></td>
+      </tr>
+      <tr>
+        <th>Opaque 35%</th>
+        <td id="t1-31"></td>
+        <td id="t1-32"></td>
+        <td id="t1-33"></td>
+      </tr>
+      <tr>
+        <th>Govt $96</th>
+        <td id="t1-41"></td>
+        <td id="t1-42"></td>
+        <td id="t1-43"></td>
+      </tr>
+
+    </table>
+
+    <p id="hour"></p>
+
+    <table id="Overall">
+      <tr>
+        <th>Total Revenue</th>
+        <td id="tr"></td>
+      </tr>
+      <tr>
+        <th>Net Revenue</th>
+        <td id="nr"></td>
+      </tr>
+      <tr>
+        <th>Total Sold</th>
+        <td id="ns"></td>
+      </tr>
+      <tr>
+        <th>ADR</th>
+        <td id="adr"></td>
+      </tr>
+    </table>
+<br>
+
+ <select id="RLselector" class="select">
+   <option value="Rack">Rack</option>
+   <option value="Last Minute">Last Minute</option>
+   <option value="Opaque">Opaque</option>
+   <option value="Government">Government</option>
+ </select>
+
+    <table id="compare">
+      <tr>
+        <th>Hotel</th>
+        <th>6:00 AM</th>
+        <th>8:00 AM</th>
+        <th>10:00 AM</th>
+        <th>12:00 PM</th>
+        <th>2:00 PM</th>
+        <th>4:00 PM</th>
+        <th>6:00 PM</th>
+        <th>8:00 PM</th>
+        <th>10:00 PM</th>
+        <th>12:00 AM</th>
+      </tr>
+      <tr>
+        <th>Best Western Plus</th>
+        <td id="row1-6"></td>
+        <td id="row1-8"></td>
+        <td id="row1-10"></td>
+        <td id="row1-12"></td>
+        <td id="row1-14"></td>
+        <td id="row1-16"></td>
+        <td id="row1-18"></td>
+        <td id="row1-20"></td>
+        <td id="row1-22"></td>
+        <td id="row1-24"></td>
+      </tr>
+      <tr>
+        <th>Hampton Inn</th>
+        <td id="row2-6"></td>
+        <td id="row2-8"></td>
+        <td id="row2-10"></td>
+        <td id="row2-12"></td>
+        <td id="row2-14"></td>
+        <td id="row2-16"></td>
+        <td id="row2-18"></td>
+        <td id="row2-20"></td>
+        <td id="row2-22"></td>
+        <td id="row2-24"></td>
+      </tr>
+      <tr>
+        <th>Holiday Inn Express</th>
+        <td id="row3-6"></td>
+        <td id="row3-8"></td>
+        <td id="row3-10"></td>
+        <td id="row3-12"></td>
+        <td id="row3-14"></td>
+        <td id="row3-16"></td>
+        <td id="row3-18"></td>
+        <td id="row3-20"></td>
+        <td id="row3-22"></td>
+        <td id="row3-24"></td>
+      </tr>
+      <tr>
+        <th>Comfort Inn</th>
+        <td id="row4-6"></td>
+        <td id="row4-8"></td>
+        <td id="row4-10"></td>
+        <td id="row4-12"></td>
+        <td id="row4-14"></td>
+        <td id="row4-16"></td>
+        <td id="row4-18"></td>
+        <td id="row4-20"></td>
+        <td id="row4-22"></td>
+        <td id="row4-24"></td>
+      </tr>
+    </table>
+
+
+
+    </div>
+    </div>
+
+<img id="time" src="../assets/images/hourglass.png" width="95" height="95"></img>
+
+<span id="time-display">05:00</span>
+
+
+<a href="summary.html">
+    <img id="close" border="0" alt="hotel" src="../assets/images/close.png" width="65" height="65"></img>
+</a>
+
+<img id="bush" border="0" alt="bush" src="../assets/images/8.png" width="400" height="120"></img>
+<img id="bush2" border="0" alt="bush" src="../assets/images/8.png" width="400" height="120"></img>
+<img id="bush3" border="0" alt="bush" src="../assets/images/8.png" width="375" height="120"></img>
+<img id="bush4" border="0" alt="bush" src="../assets/images/8.png" width="400" height="120"></img>
+
+<img id="road" border="0" alt="road" src="../assets/images/highway2.jpg" width="1400" height="50"></img>
+
+<div class="popup1" onclick="popup_c1()">
+  <img id="c1" src="../assets/images/Comfort.png" width="310" height="310"></img>
+  <span class="popuptext1" id="myPopup1">Comfort Inn<br>
+Rooms:  78<br>
+Location:  1.4 miles away<br>
+TripAdvisor Rating:  3.8
+</span>
+</div>
+
+<div class="popup2" onclick="popup_c2()">
+  <img id="c2" src="../assets/images/HIE.png" width="310" height="310"></img>
+  <span class="popuptext2" id="myPopup2">Holiday Inn Express<br>
+Rooms:  95<br>
+Location:  0.6 miles away<br>
+TripAdvisor Rating:  4.0
+</span>
+</div>
+
+<div class="popup3" onclick="popup_c3()">
+  <img id="c3" src="../assets/images/Hampton.png" width="310" height="310"></img>
+  <span class="popuptext3" id="myPopup3">Hampton Inn<br>
+Rooms:  120<br>
+Location:  0.2 miles away<br>
+TripAdvisor Rating:  4.2
+</span>
+</div>
+
+<div class="popup" onclick="popup_BW()">
+  <img id="BW" src="../assets/images/BW.png" width="345" height="345"></img>
+  <span class="popuptext" id="myPopup">Best Western PLUS<br>
+Chain scale:  upper mid-scale<br>
+Rooms:  80<br>
+Location:  Suburban<br>
+Market:  Secondary<br>
+TripAdvisor Rating:  4.2
+</span>
+</div>
+
+<script>
+function popup_c1() {
+  var popup = document.getElementById("myPopup1");
+  popup.classList.toggle("show1");
+}
+
+function popup_c2() {
+  var popup = document.getElementById("myPopup2");
+  popup.classList.toggle("show2");
+}
+
+function popup_c3() {
+  var popup = document.getElementById("myPopup3");
+  popup.classList.toggle("show3");
+}
+
+// When the user clicks on div, open the popup
+function popup_BW() {
+  var popup = document.getElementById("myPopup");
+  popup.classList.toggle("show");
+}
+</script>
+
+<div id ="car_cont">
+<img id="car" border="0" alt="car" src="../assets/images/car1.png" width="170" height="170"></img>
+</div>
+  </div>
+
+  <div id="bottom">
+    <div class="rectangle"></div>
+    <div class="triangle-right"></div>
+        <img id="star" border="0" alt="star" src="../assets/images/star.png" width="75" height="75"></img>
+    <p>6am 8am 10am 12pm 2pm 4pm 6pm 8pm 10pm 12am</p>
+  </div>
+  </div>
+</body>
+</html>
