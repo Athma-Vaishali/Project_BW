@@ -47,6 +47,7 @@
     <script>
     var myVar;
     var i=0;
+    var x=0,y=0;
     var array = ["6am","8am","10am","12pm","2pm","4pm","6pm","8pm","10pm","12pm"];
     var num = [6,8,10,12,14,16,18,20,22,24];
     var King_Rack,King_Last,King_Opaque,King_Gov;
@@ -54,8 +55,11 @@
     var Suite_Rack,Suite_Last,Suite_Opaque,Suite_Gov;
     var car_position=420;
     var K_rack_rev,Q_rack_rev,S_rack_rev,E_rack_rev,K_last_rev,Q_last_rev,S_last_rev,E_last_rev,K_opaque_rev,Q_opaque_rev,S_opaque_rev,E_opaque_rev,K_gov_rev,Q_gov_rev,S_gov_rev,E_gov_rev;
-    var K_tr,K_nr,K_ts,K_adr,Q_tr,Q_nr,Q_ts,Q_adr,S_tr,S_nr,S_ts,S_adr,E_tr,E_nr,E_ts,E_adr;
-
+    var K_tr,K_nr,K_ts,K_adr,Q_tr,Q_nr,Q_ts,Q_adr,S_tr,S_nr,S_ts,S_adr,E_tr=0,E_nr,E_ts=0,E_adr;
+    var Sold = new Array(16);
+    sessionStorage.setItem("Rev", 0);
+    sessionStorage.setItem("Sold", 0);
+    var count=0;
 
     function initial(){
        countdown();
@@ -64,16 +68,18 @@
      }
 
     function sethour(){
+
       sessionStorage.setItem("MyHour", array[i]);
       console.log(sessionStorage.getItem("MyHour"));
-      sessionStorage.setItem("MyHour_num", num[i]);
+      sessionStorage.setItem("MyHour_num", num[i+1]);
       console.log(sessionStorage.getItem("MyHour_num"));
       i=i+1;
-      console.log(i);
       if(i==10){
         document.getElementById("cont").disabled = true;
         document.getElementById("update").disabled = true;
       }
+
+
     }
 
     function fifteen() {
@@ -247,6 +253,8 @@
     <script type="text/javascript" src="../lib/apiGatewayCore/utils.js"></script>
     <script type="text/javascript" src="../apigClient.js"></script>
 
+
+
     <script>
 
       function start(){
@@ -254,7 +262,6 @@
           report();
           move_car();
           move_star();
-          sethour();
       }
 
       function move_star(){
@@ -264,9 +271,9 @@
 
       function save_price(){
 
+
         var docClient = new AWS.DynamoDB.DocumentClient();
         var the_email = sessionStorage.getItem("User_email");
-        console.log(sessionStorage.getItem("User_email"));
         var the_time = Number(sessionStorage.getItem("MyHour_num"));
         King_Rack=Number(King_Rack);
         King_Last=Number(King_Last);
@@ -284,12 +291,28 @@
         var apigClient = apigClientFactory.newClient();
 
         var apigClient = apigClientFactory.newClient({
-          accessKey: '****',
-          secretKey: '****',
+          accessKey: 'AKIA6QNNY4GIMWEO3AEG',
+          secretKey: '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',
         });
 
-        var body = {
+        var params = {
+            "email": the_email,
+            "gametime": the_time,
+            "K_rack_Price": King_Rack,
+            "K_last_Price": King_Last,
+            "K_opaque_Price": King_Opaque,
+            "K_gov_Price": King_Gov,
+            "Q_rack_Price": Queen_Rack,
+            "Q_last_Price": Queen_Last,
+            "Q_opaque_Price": Queen_Opaque,
+            "Q_gov_Price": Queen_Gov,
+            "S_rack_Price": Suite_Rack,
+            "S_last_Price": Suite_Last,
+            "S_opaque_Price": Suite_Opaque,
+            "S_gov_Price": Suite_Gov
+          };
 
+        var body = {
             "email": the_email,
             "gametime": the_time,
             "K_rack_Price": King_Rack,
@@ -307,18 +330,31 @@
           };
 
 
-apigClient.gamedataPost(body)
-    .then(function(result){
-      console.log("Submitted successfully");
-    }).catch( function(result){
-        console.log("error occurred");
-    });
+      apigClient.gamedataPost(params,body)
+          .then(function(result){
+              console.log("Price values submitted");
+              get_sold();
+          }).catch( function(result){
+              console.log("Price submission ERROR");
+          });
 
       }
 
+
+
+
       function report(){
         document.getElementById("hour").innerHTML=sessionStorage.getItem("MyHour");
+        count=count+1;
         update_table1();
+        console.log("report count "+ count);
+        x=x+E_tr;
+        y=y+E_ts;
+        console.log("E_tr="+E_tr+"E_ts="+E_ts);
+        console.log("Rev="+x+"Sold="+y);
+        sessionStorage.setItem("Rev", x);
+        sessionStorage.setItem("Sold", y);
+        var val= document.getElementById("RLselector").value;
       }
 
       function update_table1(){
@@ -327,6 +363,10 @@ apigClient.gamedataPost(body)
           document.getElementById("t1-21").innerHTML="$"+King_Last;
           document.getElementById("t1-31").innerHTML="$"+King_Opaque;
           document.getElementById("t1-41").innerHTML="$"+King_Gov;
+          document.getElementById("t1-12").innerHTML=Sold[0];
+          document.getElementById("t1-22").innerHTML=Sold[1];
+          document.getElementById("t1-32").innerHTML=Sold[2];
+          document.getElementById("t1-42").innerHTML=Sold[3];
           calc();
           document.getElementById("t1-13").innerHTML="$"+K_rack_rev;
           document.getElementById("t1-23").innerHTML="$"+K_last_rev;
@@ -334,12 +374,144 @@ apigClient.gamedataPost(body)
           document.getElementById("t1-43").innerHTML="$"+K_gov_rev;
 
           document.getElementById("tr").innerHTML="$"+K_tr;
+          document.getElementById("nr").innerHTML="$"+K_nr;
+          document.getElementById("ns").innerHTML="$"+K_ts;
+          document.getElementById("adr").innerHTML="$"+K_adr;
+
+
+          document.getElementById("RLselector").addEventListener("change", () => {
+            var val= document.getElementById("RLselector").value;
+            if(val=="Rack"){
+              if(count==1){
+                document.getElementById("row1-6").innerHTML="$"+King_Rack;
+              }
+              if(count==2){
+                document.getElementById("row1-8").innerHTML="$"+King_Rack;
+              }
+              if(count==3){
+                document.getElementById("row1-10").innerHTML="$"+King_Rack;
+              }
+              if(count==4){
+                document.getElementById("row1-12").innerHTML="$"+King_Rack;
+              }
+              if(count==5){
+                document.getElementById("row1-14").innerHTML="$"+King_Rack;
+              }
+              if(count==6){
+                document.getElementById("row1-16").innerHTML="$"+King_Rack;
+              }
+              if(count==7){
+                document.getElementById("row1-18").innerHTML="$"+King_Rack;
+              }
+              if(count==8){
+                document.getElementById("row1-20").innerHTML="$"+King_Rack;
+              }
+              if(count==9){
+                document.getElementById("row1-22").innerHTML="$"+King_Rack;
+              }
+            }
+            if(val=="Last Minute"){
+              if(count==1){
+                document.getElementById("row1-6").innerHTML="$"+King_Last;
+              }
+              if(count==2){
+                document.getElementById("row1-8").innerHTML="$"+King_Last;
+              }
+              if(count==3){
+                document.getElementById("row1-10").innerHTML="$"+King_Last;
+              }
+              if(count==4){
+                document.getElementById("row1-12").innerHTML="$"+King_Last;
+              }
+              if(count==5){
+                document.getElementById("row1-14").innerHTML="$"+King_Last;
+              }
+              if(count==6){
+                document.getElementById("row1-16").innerHTML="$"+King_Last;
+              }
+              if(count==7){
+                document.getElementById("row1-18").innerHTML="$"+King_Last;
+              }
+              if(count==8){
+                document.getElementById("row1-20").innerHTML="$"+King_Last;
+              }
+              if(count==9){
+                document.getElementById("row1-22").innerHTML="$"+King_Last;
+              }
+            }
+            if(val=="Opaque"){
+              if(count==1){
+                document.getElementById("row1-6").innerHTML="$"+King_Opaque;
+              }
+              if(count==2){
+                document.getElementById("row1-8").innerHTML="$"+King_Opaque;
+              }
+              if(count==3){
+                document.getElementById("row1-10").innerHTML="$"+King_Opaque;
+              }
+              if(count==4){
+                document.getElementById("row1-12").innerHTML="$"+King_Opaque;
+              }
+              if(count==5){
+                document.getElementById("row1-14").innerHTML="$"+King_Opaque;
+              }
+              if(count==6){
+                document.getElementById("row1-16").innerHTML="$"+King_Opaque;
+              }
+              if(count==7){
+                document.getElementById("row1-18").innerHTML="$"+King_Opaque;
+              }
+              if(count==8){
+                document.getElementById("row1-20").innerHTML="$"+King_Opaque;
+              }
+              if(count==9){
+                document.getElementById("row1-22").innerHTML="$"+King_Opaque;
+              }
+            }
+            if(val=="Government"){
+              if(count==1){
+                document.getElementById("row1-6").innerHTML="$"+King_Gov;
+              }
+              if(count==2){
+                document.getElementById("row1-8").innerHTML="$"+King_Gov;
+              }
+              if(count==3){
+                document.getElementById("row1-10").innerHTML="$"+King_Gov;
+              }
+              if(count==4){
+                document.getElementById("row1-12").innerHTML="$"+King_Gov;
+              }
+              if(count==5){
+                document.getElementById("row1-14").innerHTML="$"+King_Gov;
+              }
+              if(count==6){
+                document.getElementById("row1-16").innerHTML="$"+King_Gov;
+              }
+              if(count==7){
+                document.getElementById("row1-18").innerHTML="$"+King_Gov;
+              }
+              if(count==8){
+                document.getElementById("row1-20").innerHTML="$"+King_Gov;
+              }
+              if(count==9){
+                document.getElementById("row1-22").innerHTML="$"+King_Gov;
+              }
+            }
+
+          });
+
+
+
         });
         document.getElementById("rb2").addEventListener("click", () => {
           document.getElementById("t1-11").innerHTML="$"+Queen_Rack;
           document.getElementById("t1-21").innerHTML="$"+Queen_Last;
           document.getElementById("t1-31").innerHTML="$"+Queen_Opaque;
           document.getElementById("t1-41").innerHTML="$"+Queen_Gov;
+          document.getElementById("t1-12").innerHTML=Sold[4];
+          document.getElementById("t1-22").innerHTML=Sold[5];
+          document.getElementById("t1-32").innerHTML=Sold[6];
+          document.getElementById("t1-42").innerHTML=Sold[7];
           calc();
           document.getElementById("t1-13").innerHTML="$"+Q_rack_rev;
           document.getElementById("t1-23").innerHTML="$"+Q_last_rev;
@@ -347,12 +519,20 @@ apigClient.gamedataPost(body)
           document.getElementById("t1-43").innerHTML="$"+Q_gov_rev;
 
           document.getElementById("tr").innerHTML="$"+Q_tr;
+          document.getElementById("nr").innerHTML="$"+Q_nr;
+          document.getElementById("ns").innerHTML="$"+Q_ts;
+          document.getElementById("adr").innerHTML="$"+Q_adr;
+
         });
         document.getElementById("rb3").addEventListener("click", () => {
           document.getElementById("t1-11").innerHTML="$"+Suite_Rack;
           document.getElementById("t1-21").innerHTML="$"+Suite_Last;
           document.getElementById("t1-31").innerHTML="$"+Suite_Opaque;
           document.getElementById("t1-41").innerHTML="$"+Suite_Gov;
+          document.getElementById("t1-12").innerHTML=Sold[8];
+          document.getElementById("t1-22").innerHTML=Sold[9];
+          document.getElementById("t1-32").innerHTML=Sold[10];
+          document.getElementById("t1-42").innerHTML=Sold[11];
           calc();
           document.getElementById("t1-13").innerHTML="$"+S_rack_rev;
           document.getElementById("t1-23").innerHTML="$"+S_last_rev;
@@ -360,12 +540,24 @@ apigClient.gamedataPost(body)
           document.getElementById("t1-43").innerHTML="$"+S_gov_rev;
 
           document.getElementById("tr").innerHTML="$"+S_tr;
+          document.getElementById("nr").innerHTML="$"+S_nr;
+          document.getElementById("ns").innerHTML="$"+S_ts;
+          document.getElementById("adr").innerHTML="$"+S_adr;
+
         });
         document.getElementById("rb4").addEventListener("click", () => {
           document.getElementById("t1-11").innerHTML="$"+King_Rack+"/$"+Queen_Rack+"/$"+Suite_Rack;
           document.getElementById("t1-21").innerHTML="$"+King_Last+"/$"+Queen_Last+"/$"+Suite_Last;
           document.getElementById("t1-31").innerHTML="$"+King_Opaque+"/$"+Queen_Opaque+"/$"+Suite_Opaque;
           document.getElementById("t1-41").innerHTML="$"+King_Gov+"/$"+Queen_Gov+"/$"+Suite_Gov;
+          Sold[12]=Sold[0]+Sold[4]+Sold[8];
+          Sold[13]=Sold[1]+Sold[5]+Sold[9];
+          Sold[14]=Sold[2]+Sold[6]+Sold[10];
+          Sold[15]=Sold[3]+Sold[7]+Sold[11];
+          document.getElementById("t1-12").innerHTML=Sold[12];
+          document.getElementById("t1-22").innerHTML=Sold[13];
+          document.getElementById("t1-32").innerHTML=Sold[14];
+          document.getElementById("t1-42").innerHTML=Sold[15];
           calc();
           document.getElementById("t1-13").innerHTML="$"+E_rack_rev;
           document.getElementById("t1-23").innerHTML="$"+E_last_rev;
@@ -373,6 +565,10 @@ apigClient.gamedataPost(body)
           document.getElementById("t1-43").innerHTML="$"+E_gov_rev;
 
           document.getElementById("tr").innerHTML="$"+E_tr;
+          document.getElementById("nr").innerHTML="$"+E_nr;
+          document.getElementById("ns").innerHTML="$"+E_ts;
+          document.getElementById("adr").innerHTML="$"+E_adr;
+
         });
       }
 
@@ -382,41 +578,103 @@ apigClient.gamedataPost(body)
         if(King_Rack=="NA"){
           K_rack_rev=Q_rack_rev=S_rack_rev=E_rack_rev=0;
         }else{
-          K_rack_rev=King_Rack*2;
-          Q_rack_rev=Queen_Rack*1;
-          S_rack_rev=Suite_Rack*1;
+          K_rack_rev=King_Rack*Sold[0];
+          Q_rack_rev=Queen_Rack*Sold[4];
+          S_rack_rev=Suite_Rack*Sold[8];
           E_rack_rev=K_rack_rev+Q_rack_rev+S_rack_rev;
         }
         if(King_Last=="NA"){
           K_last_rev=Q_last_rev=S_last_rev=E_last_rev=0;
         }else{
-          K_last_rev=King_Last*2;
-          Q_last_rev=Queen_Last*1;
-          S_last_rev=Suite_Last*1;
+          K_last_rev=King_Last*Sold[1];
+          Q_last_rev=Queen_Last*Sold[5];
+          S_last_rev=Suite_Last*Sold[9];
           E_last_rev=K_last_rev+Q_last_rev+S_last_rev;
         }
         if(King_Opaque=="NA"){
           K_opaque_rev=Q_opaque_rev=S_opaque_rev=E_opaque_rev=0;
         }else{
-          K_opaque_rev=King_Opaque*2;
-          Q_opaque_rev=Queen_Opaque*1;
-          S_opaque_rev=Suite_Opaque*1;
+          K_opaque_rev=King_Opaque*Sold[2];
+          Q_opaque_rev=Queen_Opaque*Sold[6];
+          S_opaque_rev=Suite_Opaque*Sold[10];
           E_opaque_rev=K_opaque_rev+Q_opaque_rev+S_opaque_rev;
         }
         if(King_Gov=="NA"){
           K_gov_rev=Q_gov_rev=S_gov_rev=E_gov_rev=0;
         }else{
-          K_gov_rev=King_Gov*2;
-          Q_gov_rev=Queen_Gov*1
-          S_gov_rev=Suite_Gov*1;
+          K_gov_rev=King_Gov*Sold[3];
+          Q_gov_rev=Queen_Gov*Sold[7];
+          S_gov_rev=Suite_Gov*Sold[11];
           E_gov_rev=K_gov_rev+Q_gov_rev+S_gov_rev;
         }
         K_tr=K_rack_rev+K_last_rev+K_opaque_rev+K_gov_rev;
         Q_tr=Q_rack_rev+Q_last_rev+Q_opaque_rev+Q_gov_rev;
         S_tr=S_rack_rev+S_last_rev+S_opaque_rev+S_gov_rev;
         E_tr=E_rack_rev+E_last_rev+E_opaque_rev+E_gov_rev;
+
+        K_ts=Sold[0]+Sold[1]+Sold[2]+Sold[3];
+        Q_ts=Sold[4]+Sold[5]+Sold[6]+Sold[7];
+        S_ts=Sold[8]+Sold[9]+Sold[10]+Sold[11];
+        E_ts=Sold[12]+Sold[13]+Sold[14]+Sold[15];
+
+        K_nr=K_tr-(K_ts*30);
+        Q_nr=Q_tr-(Q_ts*30);
+        S_nr=S_tr-(S_ts*30);
+        E_nr=E_tr-(E_ts*30);
+
+        K_adr=K_tr/K_ts;
+        Q_adr=Q_tr/Q_ts;
+        S_adr=S_tr/S_ts;
+        E_adr=E_tr/E_ts;
       }
 
+    </script>
+
+<script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+    <script>
+    function get_sold(){
+
+            AWS.config.update({
+            region: "us-east-1",
+            endpoint: "https://dynamodb.us-east-1.amazonaws.com",
+            accessKeyId: "AKIA6QNNY4GIMWEO3AEG",
+            secretAccessKey: "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"
+            });
+            var docClient = new AWS.DynamoDB.DocumentClient();
+
+            var the_email = sessionStorage.getItem("User_email");
+            var the_time = Number(sessionStorage.getItem("MyHour_num"));
+
+              var params = {
+                  TableName: "Game_data",
+                  Key:{
+                    "email": the_email,
+                    "gametime": the_time
+                  }
+              };
+
+              docClient.get(params, function(err, data) {
+                      if (err) {
+                          console.log("error");
+                      } else {
+                          console.log(data);
+                          Sold[0]=data.Item.K_rack_Sold;
+                          Sold[1]=data.Item.K_last_Sold;
+                          Sold[2]=data.Item.K_opaque_Sold;
+                          Sold[3]=data.Item.K_gov_Sold;
+                          Sold[4]=data.Item.Q_rack_Sold;
+                          Sold[5]=data.Item.Q_last_Sold;
+                          Sold[6]=data.Item.Q_opaque_Sold;
+                          Sold[7]=data.Item.Q_gov_Sold;
+                          Sold[8]=data.Item.S_rack_Sold;
+                          Sold[9]=data.Item.S_last_Sold;
+                          Sold[10]=data.Item.S_opaque_Sold;
+                          Sold[11]=data.Item.S_gov_Sold;
+                      }
+                  });
+
+                  sethour();
+      }
     </script>
       </div>
     </div>
@@ -488,10 +746,10 @@ apigClient.gamedataPost(body)
 <br>
 
  <select id="RLselector" class="select">
-   <option value="Rack">Rack</option>
-   <option value="Last Minute">Last Minute</option>
-   <option value="Opaque">Opaque</option>
-   <option value="Government">Government</option>
+   <option value="Rack"><b>Rack</b></option>
+   <option value="Last Minute"><b>Last Minute</b></option>
+   <option value="Opaque"><b>Opaque</b></option>
+   <option value="Government"><b>Government</b></option>
  </select>
 
     <table id="compare">
@@ -562,7 +820,25 @@ apigClient.gamedataPost(body)
       </tr>
     </table>
 
+    </div>
+    </div>
 
+    <div class="dropdown">
+      <img id="view_history" border="0" alt="view_history" src="../assets/images/view_history.png" width="120" height="120"></img>
+      <div id="d3" class="dropdown-content">
+        <table>
+          <tr>
+            <td><img id="i1" border="0" alt="view_history" src="../assets/images/Comp Logistics.png" width="320" height="120"></img></td>
+            <td rowspan="2"><img id="i2" border="0" alt="view_history" src="../assets/images/BestREV Forecast.png" width="200" height="275"></img></td>
+            <td rowspan="2"><img id="i3" border="0" alt="view_history" src="../assets/images/STR Report.png" width="220" height="220"></img></td>
+          </tr>
+          <tr>
+            <td><img id="i4" border="0" alt="view_history" src="../assets/images/Comp Promos.png" width="320" height="120"></img></td>
+          </tr>
+          <tr>
+            <td colspan="2"><img id="i5" border="0" alt="view_history" src="../assets/images/OTA Insight.png" width="620" height="150"></img></td>
+            <td><img id="i6" border="0" alt="view_history" src="../assets/images/Room Type Sales.png" width="300" height="250"></img></td>
+        </table>
 
     </div>
     </div>

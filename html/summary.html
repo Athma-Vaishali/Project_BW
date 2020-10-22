@@ -5,6 +5,45 @@
   <link rel="stylesheet" href="../css/summary.css">
   <meta charset="UTF-8" />
   <title>BW_Game</title>
+
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
+  <script>
+
+AWS.config.update({
+region: "us-east-1",
+endpoint: "https://dynamodb.us-east-1.amazonaws.com",
+accessKeyId: "AKIA6QNNY4GIMWEO3AEG",
+secretAccessKey: "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"
+});
+
+var docClient = new AWS.DynamoDB.DocumentClient();
+
+    var table = "Users";
+    var the_email = sessionStorage.getItem("User_email");
+    var Net_revenue = sessionStorage.getItem("Rev");
+
+    var params = {
+        TableName:table,
+        Key:{
+            "email": the_email
+        },
+        UpdateExpression: "set net_rev = :r",
+        ExpressionAttributeValues:{
+            ":r":Net_revenue
+        },
+        ReturnValues:"UPDATED_NEW"
+    };
+
+    docClient.update(params, function(err, data) {
+        if (err) {
+            console.log("Net_rev ERROR");
+        } else {
+            console.log("Net_rev Updated");
+        }
+    });
+
+
+</script>
 </head>
 
 <body>
@@ -16,27 +55,27 @@
 <table id="results">
   <tr>
     <th>Total Revenue</th>
-    <td>Num</td>
+    <td id="s1"></td>
   </tr>
   <tr>
     <th>Net Revenue</th>
-    <td>Num</td>
+    <td id="s2"></td>
   </tr>
   <tr>
     <th>Baseline Net Revenue<span>*</span></th>
-    <td>Num</td>
+    <td id="s3"></td>
   </tr>
   <tr>
     <th>Optimum Net Revenue<br>(Perfect Score)</th>
-    <td>Num</td>
+    <td id="s4"></td>
   </tr>
   <tr>
     <th>Revenue Differential<br>(Your Net Revenue-Baseline Net Revenue)</th>
-    <td>Num</td>
+    <td id="s5"></td>
   </tr>
   <tr>
     <th>Revenue Differential X 365 Days</th>
-    <td>Num</td>
+    <td id="s6"></td>
   </tr>
 
 <p>*If rates and rate levels remained untouched</p>
@@ -44,6 +83,19 @@
 <img border="0" alt="Next" src="../assets/images/next.png" width="100" height="100">
 </a>
 
+<script>
+var Revenue=sessionStorage.getItem("Rev");
+var Sold=sessionStorage.getItem("Sold");
+var Net=Revenue-(Sold*30);
+var s5=Net-3587;
+var s6=Net*365;
+document.getElementById("s1").innerHTML="$"+Revenue;
+document.getElementById("s2").innerHTML="$"+Net
+document.getElementById("s3").innerHTML="$3587";
+document.getElementById("s4").innerHTML="$3992";
+document.getElementById("s5").innerHTML="$"+s5;
+document.getElementById("s6").innerHTML="$"+s6;
+</script>
 
 </div>
 </body>
