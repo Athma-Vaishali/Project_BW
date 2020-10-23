@@ -181,7 +181,7 @@ color: black;
   text-shadow: 3px 2px 2px lightblue;
 }
 
-a{
+#close{
   position: absolute;
   left: 1300px;
   top: 10px;

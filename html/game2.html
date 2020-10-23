@@ -48,6 +48,7 @@
     var myVar;
     var i=0;
     var x=0,y=0;
+    var k=0;
     var array = ["6am","8am","10am","12pm","2pm","4pm","6pm","8pm","10pm","12pm"];
     var num = [6,8,10,12,14,16,18,20,22,24];
     var King_Rack,King_Last,King_Opaque,King_Gov;
@@ -60,6 +61,14 @@
     sessionStorage.setItem("Rev", 0);
     sessionStorage.setItem("Sold", 0);
     var count=0;
+    var Hampton = ["$89","NA","NA","$96","$89","NA","NA","$96","$89","NA","NA","$96","$89","NA","NA","$96","$89","NA","NA","$96","$89","NA","NA","$96","$89","NA","NA","$96","$89","NA","NA","$96","$97","NA","NA","$96","$97","NA","NA","$96"];
+    var Holiday = ["$96","NA","NA","$96","$96","NA","NA","$96","$98","NA","NA","$96","$99","NA","NA","$96","$97","NA","NA","$96","$99","NA","NA","$96","$101","NA","NA","$96","$107","NA","NA","$96","$108","NA","NA","$96","$106","NA","NA","$96"];
+    var Comfort = ["$84","$79","NA","$96","$86","$81","NA","$96","$89","NA","NA","$96","$87","NA","NA","$96","$84","NA","NA","$96","$89","NA","NA","$96","$91","NA","NA","$96","$99","NA","NA","$96","$99","NA","NA","$96","$94","NA","NA","$96"];
+    var Prices = new Array(120);
+    var val;
+    var rate_type;
+    var tot_rev = [0,0,0,0,0,0,0,0,0,0];
+    var tot_sold = [0,0,0,0,0,0,0,0,0,0];
 
     function initial(){
        countdown();
@@ -87,7 +96,15 @@
     }
 
     function alertFunc() {
-      window.location.href ="timeup.html"
+      var rev_sum=0;
+      var sold_sum=0;
+      for(var l=0;l<9;l++){
+        rev_sum=rev_sum+tot_rev[l];
+        sold_sum=sold_sum+tot_sold[l];
+      }
+      sessionStorage.setItem("Rev", rev_sum);
+      sessionStorage.setItem("Sold", sold_sum);
+      window.location.href ="timeup.html";
     }
 
     function move_car(){
@@ -137,21 +154,21 @@
       </tr>
       <tr>
         <th>King</th>
-        <td><input type="number" id="K_rack"></td>
+        <td><input type="number" id="K_rack" value="91"></td>
         <td id="K_last"></td>
         <td id="K_opaque"></td>
         <td id="K_gov"></td>
       </tr>
       <tr>
         <th>QQ</th>
-        <td><input type="number" id="Q_rack"></td>
+        <td><input type="number" id="Q_rack" value="96"></td>
         <td id="Q_last"></td>
         <td id="Q_opaque"></td>
         <td id="Q_gov"></td>
       </tr>
       <tr>
         <th>Suite QQ</th>
-        <td><input type="number" id="S_rack"></td>
+        <td><input type="number" id="S_rack" value="106"></td>
         <td id="S_last"></td>
         <td id="S_opaque"></td>
         <td id="S_gov"></td>
@@ -271,6 +288,20 @@
 
       function save_price(){
 
+        Prices[k]=King_Rack;
+        Prices[k+1]=King_Last;
+        Prices[k+2]=King_Opaque;
+        Prices[k+3]=King_Gov;
+        Prices[k+4]=Queen_Rack;
+        Prices[k+5]=Queen_Last;
+        Prices[k+6]=Queen_Opaque;
+        Prices[k+7]=Queen_Gov;
+        Prices[k+8]=Suite_Rack;
+        Prices[k+9]=Suite_Last;
+        Prices[k+10]=Suite_Opaque;
+        Prices[k+11]=Suite_Gov;
+
+        k=k+12;
 
         var docClient = new AWS.DynamoDB.DocumentClient();
         var the_email = sessionStorage.getItem("User_email");
@@ -340,242 +371,20 @@
 
       }
 
-
-
-
-      function report(){
-        document.getElementById("hour").innerHTML=sessionStorage.getItem("MyHour");
-        count=count+1;
-        update_table1();
-        console.log("report count "+ count);
-        x=x+E_tr;
-        y=y+E_ts;
-        console.log("E_tr="+E_tr+"E_ts="+E_ts);
-        console.log("Rev="+x+"Sold="+y);
-        sessionStorage.setItem("Rev", x);
-        sessionStorage.setItem("Sold", y);
-        var val= document.getElementById("RLselector").value;
+      function addup(){
+        var rev_sum=0;
+        var sold_sum=0;
+        for(var l=0;l<9;l++){
+          rev_sum=rev_sum+tot_rev[l];
+          sold_sum=sold_sum+tot_sold[l];
+        }
+        sessionStorage.setItem("Rev", rev_sum);
+        sessionStorage.setItem("Sold", sold_sum);
+        window.location.href = "summary.html";
       }
-
-      function update_table1(){
-        document.getElementById("rb1").addEventListener("click", () => {
-          document.getElementById("t1-11").innerHTML="$"+King_Rack;
-          document.getElementById("t1-21").innerHTML="$"+King_Last;
-          document.getElementById("t1-31").innerHTML="$"+King_Opaque;
-          document.getElementById("t1-41").innerHTML="$"+King_Gov;
-          document.getElementById("t1-12").innerHTML=Sold[0];
-          document.getElementById("t1-22").innerHTML=Sold[1];
-          document.getElementById("t1-32").innerHTML=Sold[2];
-          document.getElementById("t1-42").innerHTML=Sold[3];
-          calc();
-          document.getElementById("t1-13").innerHTML="$"+K_rack_rev;
-          document.getElementById("t1-23").innerHTML="$"+K_last_rev;
-          document.getElementById("t1-33").innerHTML="$"+K_opaque_rev;
-          document.getElementById("t1-43").innerHTML="$"+K_gov_rev;
-
-          document.getElementById("tr").innerHTML="$"+K_tr;
-          document.getElementById("nr").innerHTML="$"+K_nr;
-          document.getElementById("ns").innerHTML="$"+K_ts;
-          document.getElementById("adr").innerHTML="$"+K_adr;
-
-
-          document.getElementById("RLselector").addEventListener("change", () => {
-            var val= document.getElementById("RLselector").value;
-            if(val=="Rack"){
-              if(count==1){
-                document.getElementById("row1-6").innerHTML="$"+King_Rack;
-              }
-              if(count==2){
-                document.getElementById("row1-8").innerHTML="$"+King_Rack;
-              }
-              if(count==3){
-                document.getElementById("row1-10").innerHTML="$"+King_Rack;
-              }
-              if(count==4){
-                document.getElementById("row1-12").innerHTML="$"+King_Rack;
-              }
-              if(count==5){
-                document.getElementById("row1-14").innerHTML="$"+King_Rack;
-              }
-              if(count==6){
-                document.getElementById("row1-16").innerHTML="$"+King_Rack;
-              }
-              if(count==7){
-                document.getElementById("row1-18").innerHTML="$"+King_Rack;
-              }
-              if(count==8){
-                document.getElementById("row1-20").innerHTML="$"+King_Rack;
-              }
-              if(count==9){
-                document.getElementById("row1-22").innerHTML="$"+King_Rack;
-              }
-            }
-            if(val=="Last Minute"){
-              if(count==1){
-                document.getElementById("row1-6").innerHTML="$"+King_Last;
-              }
-              if(count==2){
-                document.getElementById("row1-8").innerHTML="$"+King_Last;
-              }
-              if(count==3){
-                document.getElementById("row1-10").innerHTML="$"+King_Last;
-              }
-              if(count==4){
-                document.getElementById("row1-12").innerHTML="$"+King_Last;
-              }
-              if(count==5){
-                document.getElementById("row1-14").innerHTML="$"+King_Last;
-              }
-              if(count==6){
-                document.getElementById("row1-16").innerHTML="$"+King_Last;
-              }
-              if(count==7){
-                document.getElementById("row1-18").innerHTML="$"+King_Last;
-              }
-              if(count==8){
-                document.getElementById("row1-20").innerHTML="$"+King_Last;
-              }
-              if(count==9){
-                document.getElementById("row1-22").innerHTML="$"+King_Last;
-              }
-            }
-            if(val=="Opaque"){
-              if(count==1){
-                document.getElementById("row1-6").innerHTML="$"+King_Opaque;
-              }
-              if(count==2){
-                document.getElementById("row1-8").innerHTML="$"+King_Opaque;
-              }
-              if(count==3){
-                document.getElementById("row1-10").innerHTML="$"+King_Opaque;
-              }
-              if(count==4){
-                document.getElementById("row1-12").innerHTML="$"+King_Opaque;
-              }
-              if(count==5){
-                document.getElementById("row1-14").innerHTML="$"+King_Opaque;
-              }
-              if(count==6){
-                document.getElementById("row1-16").innerHTML="$"+King_Opaque;
-              }
-              if(count==7){
-                document.getElementById("row1-18").innerHTML="$"+King_Opaque;
-              }
-              if(count==8){
-                document.getElementById("row1-20").innerHTML="$"+King_Opaque;
-              }
-              if(count==9){
-                document.getElementById("row1-22").innerHTML="$"+King_Opaque;
-              }
-            }
-            if(val=="Government"){
-              if(count==1){
-                document.getElementById("row1-6").innerHTML="$"+King_Gov;
-              }
-              if(count==2){
-                document.getElementById("row1-8").innerHTML="$"+King_Gov;
-              }
-              if(count==3){
-                document.getElementById("row1-10").innerHTML="$"+King_Gov;
-              }
-              if(count==4){
-                document.getElementById("row1-12").innerHTML="$"+King_Gov;
-              }
-              if(count==5){
-                document.getElementById("row1-14").innerHTML="$"+King_Gov;
-              }
-              if(count==6){
-                document.getElementById("row1-16").innerHTML="$"+King_Gov;
-              }
-              if(count==7){
-                document.getElementById("row1-18").innerHTML="$"+King_Gov;
-              }
-              if(count==8){
-                document.getElementById("row1-20").innerHTML="$"+King_Gov;
-              }
-              if(count==9){
-                document.getElementById("row1-22").innerHTML="$"+King_Gov;
-              }
-            }
-
-          });
-
-
-
-        });
-        document.getElementById("rb2").addEventListener("click", () => {
-          document.getElementById("t1-11").innerHTML="$"+Queen_Rack;
-          document.getElementById("t1-21").innerHTML="$"+Queen_Last;
-          document.getElementById("t1-31").innerHTML="$"+Queen_Opaque;
-          document.getElementById("t1-41").innerHTML="$"+Queen_Gov;
-          document.getElementById("t1-12").innerHTML=Sold[4];
-          document.getElementById("t1-22").innerHTML=Sold[5];
-          document.getElementById("t1-32").innerHTML=Sold[6];
-          document.getElementById("t1-42").innerHTML=Sold[7];
-          calc();
-          document.getElementById("t1-13").innerHTML="$"+Q_rack_rev;
-          document.getElementById("t1-23").innerHTML="$"+Q_last_rev;
-          document.getElementById("t1-33").innerHTML="$"+Q_opaque_rev;
-          document.getElementById("t1-43").innerHTML="$"+Q_gov_rev;
-
-          document.getElementById("tr").innerHTML="$"+Q_tr;
-          document.getElementById("nr").innerHTML="$"+Q_nr;
-          document.getElementById("ns").innerHTML="$"+Q_ts;
-          document.getElementById("adr").innerHTML="$"+Q_adr;
-
-        });
-        document.getElementById("rb3").addEventListener("click", () => {
-          document.getElementById("t1-11").innerHTML="$"+Suite_Rack;
-          document.getElementById("t1-21").innerHTML="$"+Suite_Last;
-          document.getElementById("t1-31").innerHTML="$"+Suite_Opaque;
-          document.getElementById("t1-41").innerHTML="$"+Suite_Gov;
-          document.getElementById("t1-12").innerHTML=Sold[8];
-          document.getElementById("t1-22").innerHTML=Sold[9];
-          document.getElementById("t1-32").innerHTML=Sold[10];
-          document.getElementById("t1-42").innerHTML=Sold[11];
-          calc();
-          document.getElementById("t1-13").innerHTML="$"+S_rack_rev;
-          document.getElementById("t1-23").innerHTML="$"+S_last_rev;
-          document.getElementById("t1-33").innerHTML="$"+S_opaque_rev;
-          document.getElementById("t1-43").innerHTML="$"+S_gov_rev;
-
-          document.getElementById("tr").innerHTML="$"+S_tr;
-          document.getElementById("nr").innerHTML="$"+S_nr;
-          document.getElementById("ns").innerHTML="$"+S_ts;
-          document.getElementById("adr").innerHTML="$"+S_adr;
-
-        });
-        document.getElementById("rb4").addEventListener("click", () => {
-          document.getElementById("t1-11").innerHTML="$"+King_Rack+"/$"+Queen_Rack+"/$"+Suite_Rack;
-          document.getElementById("t1-21").innerHTML="$"+King_Last+"/$"+Queen_Last+"/$"+Suite_Last;
-          document.getElementById("t1-31").innerHTML="$"+King_Opaque+"/$"+Queen_Opaque+"/$"+Suite_Opaque;
-          document.getElementById("t1-41").innerHTML="$"+King_Gov+"/$"+Queen_Gov+"/$"+Suite_Gov;
-          Sold[12]=Sold[0]+Sold[4]+Sold[8];
-          Sold[13]=Sold[1]+Sold[5]+Sold[9];
-          Sold[14]=Sold[2]+Sold[6]+Sold[10];
-          Sold[15]=Sold[3]+Sold[7]+Sold[11];
-          document.getElementById("t1-12").innerHTML=Sold[12];
-          document.getElementById("t1-22").innerHTML=Sold[13];
-          document.getElementById("t1-32").innerHTML=Sold[14];
-          document.getElementById("t1-42").innerHTML=Sold[15];
-          calc();
-          document.getElementById("t1-13").innerHTML="$"+E_rack_rev;
-          document.getElementById("t1-23").innerHTML="$"+E_last_rev;
-          document.getElementById("t1-33").innerHTML="$"+E_opaque_rev;
-          document.getElementById("t1-43").innerHTML="$"+E_gov_rev;
-
-          document.getElementById("tr").innerHTML="$"+E_tr;
-          document.getElementById("nr").innerHTML="$"+E_nr;
-          document.getElementById("ns").innerHTML="$"+E_ts;
-          document.getElementById("adr").innerHTML="$"+E_adr;
-
-        });
-      }
-
-
 
       function calc(){
-        if(King_Rack=="NA"){
+        if(isNaN(King_Rack)){
           K_rack_rev=Q_rack_rev=S_rack_rev=E_rack_rev=0;
         }else{
           K_rack_rev=King_Rack*Sold[0];
@@ -583,7 +392,7 @@
           S_rack_rev=Suite_Rack*Sold[8];
           E_rack_rev=K_rack_rev+Q_rack_rev+S_rack_rev;
         }
-        if(King_Last=="NA"){
+        if(isNaN(King_Last)){
           K_last_rev=Q_last_rev=S_last_rev=E_last_rev=0;
         }else{
           K_last_rev=King_Last*Sold[1];
@@ -591,7 +400,7 @@
           S_last_rev=Suite_Last*Sold[9];
           E_last_rev=K_last_rev+Q_last_rev+S_last_rev;
         }
-        if(King_Opaque=="NA"){
+        if(isNaN(King_Opaque)){
           K_opaque_rev=Q_opaque_rev=S_opaque_rev=E_opaque_rev=0;
         }else{
           K_opaque_rev=King_Opaque*Sold[2];
@@ -599,7 +408,7 @@
           S_opaque_rev=Suite_Opaque*Sold[10];
           E_opaque_rev=K_opaque_rev+Q_opaque_rev+S_opaque_rev;
         }
-        if(King_Gov=="NA"){
+        if(isNaN(King_Gov)){
           K_gov_rev=Q_gov_rev=S_gov_rev=E_gov_rev=0;
         }else{
           K_gov_rev=King_Gov*Sold[3];
@@ -611,6 +420,11 @@
         Q_tr=Q_rack_rev+Q_last_rev+Q_opaque_rev+Q_gov_rev;
         S_tr=S_rack_rev+S_last_rev+S_opaque_rev+S_gov_rev;
         E_tr=E_rack_rev+E_last_rev+E_opaque_rev+E_gov_rev;
+
+        Sold[12]=Sold[0]+Sold[4]+Sold[8];
+        Sold[13]=Sold[1]+Sold[5]+Sold[9];
+        Sold[14]=Sold[2]+Sold[6]+Sold[10];
+        Sold[15]=Sold[3]+Sold[7]+Sold[11];
 
         K_ts=Sold[0]+Sold[1]+Sold[2]+Sold[3];
         Q_ts=Sold[4]+Sold[5]+Sold[6]+Sold[7];
@@ -626,6 +440,767 @@
         Q_adr=Q_tr/Q_ts;
         S_adr=S_tr/S_ts;
         E_adr=E_tr/E_ts;
+
+        tot_rev[count-1]=E_tr;
+        tot_sold[count-1]=E_ts;
+        console.log("TR and TS "+ E_tr +","+ E_ts);
+      }
+
+      function report(){
+        document.getElementById("hour").innerHTML=sessionStorage.getItem("MyHour");
+        count=count+1;
+        console.log("report count "+ count);
+        document.getElementById("RLselector").value = "Rack";
+        val= document.getElementById("RLselector").value;
+        document.getElementById("RTselector").value = "King";
+        rate_type= document.getElementById("RTselector").value;
+        update_table1();
+        update_table2();
+      }
+
+      function update_table1(){
+
+        document.getElementById("rb1").addEventListener("click", () => {
+          calc();
+          document.getElementById("t1-11").innerHTML="$"+King_Rack;
+          document.getElementById("t1-21").innerHTML="$"+King_Last;
+          document.getElementById("t1-31").innerHTML="$"+King_Opaque;
+          document.getElementById("t1-41").innerHTML="$"+King_Gov;
+          document.getElementById("t1-12").innerHTML=Sold[0];
+          document.getElementById("t1-22").innerHTML=Sold[1];
+          document.getElementById("t1-32").innerHTML=Sold[2];
+          document.getElementById("t1-42").innerHTML=Sold[3];
+
+          document.getElementById("t1-13").innerHTML="$"+K_rack_rev;
+          document.getElementById("t1-23").innerHTML="$"+K_last_rev;
+          document.getElementById("t1-33").innerHTML="$"+K_opaque_rev;
+          document.getElementById("t1-43").innerHTML="$"+K_gov_rev;
+
+          document.getElementById("tr").innerHTML="$"+K_tr;
+          document.getElementById("nr").innerHTML="$"+K_nr;
+          document.getElementById("ns").innerHTML="$"+K_ts;
+          document.getElementById("adr").innerHTML="$"+K_adr;
+        });
+        document.getElementById("rb2").addEventListener("click", () => {
+          calc();
+          document.getElementById("t1-11").innerHTML="$"+Queen_Rack;
+          document.getElementById("t1-21").innerHTML="$"+Queen_Last;
+          document.getElementById("t1-31").innerHTML="$"+Queen_Opaque;
+          document.getElementById("t1-41").innerHTML="$"+Queen_Gov;
+          document.getElementById("t1-12").innerHTML=Sold[4];
+          document.getElementById("t1-22").innerHTML=Sold[5];
+          document.getElementById("t1-32").innerHTML=Sold[6];
+          document.getElementById("t1-42").innerHTML=Sold[7];
+
+          document.getElementById("t1-13").innerHTML="$"+Q_rack_rev;
+          document.getElementById("t1-23").innerHTML="$"+Q_last_rev;
+          document.getElementById("t1-33").innerHTML="$"+Q_opaque_rev;
+          document.getElementById("t1-43").innerHTML="$"+Q_gov_rev;
+
+          document.getElementById("tr").innerHTML="$"+Q_tr;
+          document.getElementById("nr").innerHTML="$"+Q_nr;
+          document.getElementById("ns").innerHTML="$"+Q_ts;
+          document.getElementById("adr").innerHTML="$"+Q_adr;
+        });
+        document.getElementById("rb3").addEventListener("click", () => {
+          calc();
+          document.getElementById("t1-11").innerHTML="$"+Suite_Rack;
+          document.getElementById("t1-21").innerHTML="$"+Suite_Last;
+          document.getElementById("t1-31").innerHTML="$"+Suite_Opaque;
+          document.getElementById("t1-41").innerHTML="$"+Suite_Gov;
+          document.getElementById("t1-12").innerHTML=Sold[8];
+          document.getElementById("t1-22").innerHTML=Sold[9];
+          document.getElementById("t1-32").innerHTML=Sold[10];
+          document.getElementById("t1-42").innerHTML=Sold[11];
+
+          document.getElementById("t1-13").innerHTML="$"+S_rack_rev;
+          document.getElementById("t1-23").innerHTML="$"+S_last_rev;
+          document.getElementById("t1-33").innerHTML="$"+S_opaque_rev;
+          document.getElementById("t1-43").innerHTML="$"+S_gov_rev;
+
+          document.getElementById("tr").innerHTML="$"+S_tr;
+          document.getElementById("nr").innerHTML="$"+S_nr;
+          document.getElementById("ns").innerHTML="$"+S_ts;
+          document.getElementById("adr").innerHTML="$"+S_adr;
+          });
+
+          document.getElementById("rb4").addEventListener("click", () => {
+          calc();
+          document.getElementById("t1-11").innerHTML="$"+King_Rack+"/$"+Queen_Rack+"/$"+Suite_Rack;
+          document.getElementById("t1-21").innerHTML="$"+King_Last+"/$"+Queen_Last+"/$"+Suite_Last;
+          document.getElementById("t1-31").innerHTML="$"+King_Opaque+"/$"+Queen_Opaque+"/$"+Suite_Opaque;
+          document.getElementById("t1-41").innerHTML="$"+King_Gov+"/$"+Queen_Gov+"/$"+Suite_Gov;
+          document.getElementById("t1-12").innerHTML=Sold[12];
+          document.getElementById("t1-22").innerHTML=Sold[13];
+          document.getElementById("t1-32").innerHTML=Sold[14];
+          document.getElementById("t1-42").innerHTML=Sold[15];
+          document.getElementById("t1-13").innerHTML="$"+E_rack_rev;
+          document.getElementById("t1-23").innerHTML="$"+E_last_rev;
+          document.getElementById("t1-33").innerHTML="$"+E_opaque_rev;
+          document.getElementById("t1-43").innerHTML="$"+E_gov_rev;
+
+          document.getElementById("tr").innerHTML="$"+E_tr;
+          document.getElementById("nr").innerHTML="$"+E_nr;
+          document.getElementById("ns").innerHTML="$"+E_ts;
+          document.getElementById("adr").innerHTML="$"+E_adr;
+
+        });
+      }
+
+
+      function updation(){
+        console.log("hi");
+        console.log(val);
+        console.log(rate_type);
+
+            val= document.getElementById("RLselector").value;
+            rate_type= document.getElementById("RTselector").value;
+
+        if((rate_type=="King")&&(val=="Rack")){
+          switch(count){
+            case 9:
+              document.getElementById("row1-22").innerHTML="$"+Prices[96];
+              document.getElementById("row2-22").innerHTML=Hampton[32];
+              document.getElementById("row3-22").innerHTML=Holiday[32];
+              document.getElementById("row4-22").innerHTML=Comfort[32];
+            case 8:
+              document.getElementById("row1-20").innerHTML="$"+Prices[84];
+              document.getElementById("row2-20").innerHTML=Hampton[28];
+              document.getElementById("row3-20").innerHTML=Holiday[28];
+              document.getElementById("row4-20").innerHTML=Comfort[28];
+            case 7:
+              document.getElementById("row1-18").innerHTML="$"+Prices[72];
+              document.getElementById("row2-18").innerHTML=Hampton[24];
+              document.getElementById("row3-18").innerHTML=Holiday[24];
+              document.getElementById("row4-18").innerHTML=Comfort[24];
+            case 6:
+              document.getElementById("row1-16").innerHTML="$"+Prices[60];
+              document.getElementById("row2-16").innerHTML=Hampton[20];
+              document.getElementById("row3-16").innerHTML=Holiday[20];
+              document.getElementById("row4-16").innerHTML=Comfort[20];
+            case 5:
+              document.getElementById("row1-14").innerHTML="$"+Prices[48];
+              document.getElementById("row2-14").innerHTML=Hampton[16];
+              document.getElementById("row3-14").innerHTML=Holiday[16];
+              document.getElementById("row4-14").innerHTML=Comfort[16];
+            case 4:
+              document.getElementById("row1-12").innerHTML="$"+Prices[36];
+              document.getElementById("row2-12").innerHTML=Hampton[12];
+              document.getElementById("row3-12").innerHTML=Holiday[12];
+              document.getElementById("row4-12").innerHTML=Comfort[12];
+            case 3:
+              document.getElementById("row1-10").innerHTML="$"+Prices[24];
+              document.getElementById("row2-10").innerHTML=Hampton[8];
+              document.getElementById("row3-10").innerHTML=Holiday[8];
+              document.getElementById("row4-10").innerHTML=Comfort[8];
+            case 2:
+              document.getElementById("row1-8").innerHTML="$"+Prices[12];
+              document.getElementById("row2-8").innerHTML=Hampton[4];
+              document.getElementById("row3-8").innerHTML=Holiday[4];
+              document.getElementById("row4-8").innerHTML=Comfort[4];
+            case 1:
+              document.getElementById("row1-6").innerHTML="$"+Prices[0];
+              document.getElementById("row2-6").innerHTML=Hampton[0];
+              document.getElementById("row3-6").innerHTML=Holiday[0];
+              document.getElementById("row4-6").innerHTML=Comfort[0];
+          }
+        }
+        if((rate_type=="King")&&(val=="Last Minute")){
+          switch(count){
+            case 9:
+              document.getElementById("row1-22").innerHTML="$"+Prices[97];
+              document.getElementById("row2-22").innerHTML=Hampton[33];
+              document.getElementById("row3-22").innerHTML=Holiday[33];
+              document.getElementById("row4-22").innerHTML=Comfort[33];
+            case 8:
+              document.getElementById("row1-20").innerHTML="$"+Prices[85];
+              document.getElementById("row2-20").innerHTML=Hampton[29];
+              document.getElementById("row3-20").innerHTML=Holiday[29];
+              document.getElementById("row4-20").innerHTML=Comfort[29];
+            case 7:
+              document.getElementById("row1-18").innerHTML="$"+Prices[73];
+              document.getElementById("row2-18").innerHTML=Hampton[25];
+              document.getElementById("row3-18").innerHTML=Holiday[25];
+              document.getElementById("row4-18").innerHTML=Comfort[25];
+            case 6:
+              document.getElementById("row1-16").innerHTML="$"+Prices[61];
+              document.getElementById("row2-16").innerHTML=Hampton[21];
+              document.getElementById("row3-16").innerHTML=Holiday[21];
+              document.getElementById("row4-16").innerHTML=Comfort[21];
+            case 5:
+              document.getElementById("row1-14").innerHTML="$"+Prices[49];
+              document.getElementById("row2-14").innerHTML=Hampton[17];
+              document.getElementById("row3-14").innerHTML=Holiday[17];
+              document.getElementById("row4-14").innerHTML=Comfort[17];
+            case 4:
+              document.getElementById("row1-12").innerHTML="$"+Prices[37];
+              document.getElementById("row2-12").innerHTML=Hampton[13];
+              document.getElementById("row3-12").innerHTML=Holiday[13];
+              document.getElementById("row4-12").innerHTML=Comfort[13];
+            case 3:
+              document.getElementById("row1-10").innerHTML="$"+Prices[25];
+              document.getElementById("row2-10").innerHTML=Hampton[9];
+              document.getElementById("row3-10").innerHTML=Holiday[9];
+              document.getElementById("row4-10").innerHTML=Comfort[9];
+            case 2:
+              document.getElementById("row1-8").innerHTML="$"+Prices[13];
+              document.getElementById("row2-8").innerHTML=Hampton[5];
+              document.getElementById("row3-8").innerHTML=Holiday[5];
+              document.getElementById("row4-8").innerHTML=Comfort[5];
+            case 1:
+              document.getElementById("row1-6").innerHTML="$"+Prices[1];
+              document.getElementById("row2-6").innerHTML=Hampton[1];
+              document.getElementById("row3-6").innerHTML=Holiday[1];
+              document.getElementById("row4-6").innerHTML=Comfort[1];
+            }
+        }
+          if((rate_type=="King")&&(val=="Opaque")){
+          switch(count){
+            case 9:
+              document.getElementById("row1-22").innerHTML="$"+Prices[98];
+              document.getElementById("row2-22").innerHTML=Hampton[34];
+              document.getElementById("row3-22").innerHTML=Holiday[34];
+              document.getElementById("row4-22").innerHTML=Comfort[34];
+            case 8:
+              document.getElementById("row1-20").innerHTML="$"+Prices[86];
+              document.getElementById("row2-20").innerHTML=Hampton[30];
+              document.getElementById("row3-20").innerHTML=Holiday[30];
+              document.getElementById("row4-20").innerHTML=Comfort[30];
+            case 7:
+              document.getElementById("row1-18").innerHTML="$"+Prices[74];
+              document.getElementById("row2-18").innerHTML=Hampton[26];
+              document.getElementById("row3-18").innerHTML=Holiday[26];
+              document.getElementById("row4-18").innerHTML=Comfort[26];
+            case 6:
+              document.getElementById("row1-16").innerHTML="$"+Prices[62];
+              document.getElementById("row2-16").innerHTML=Hampton[22];
+              document.getElementById("row3-16").innerHTML=Holiday[22];
+              document.getElementById("row4-16").innerHTML=Comfort[22];
+            case 5:
+              document.getElementById("row1-14").innerHTML="$"+Prices[50];
+              document.getElementById("row2-14").innerHTML=Hampton[18];
+              document.getElementById("row3-14").innerHTML=Holiday[18];
+              document.getElementById("row4-14").innerHTML=Comfort[18];
+            case 4:
+              document.getElementById("row1-12").innerHTML="$"+Prices[38];
+              document.getElementById("row2-12").innerHTML=Hampton[14];
+              document.getElementById("row3-12").innerHTML=Holiday[14];
+              document.getElementById("row4-12").innerHTML=Comfort[14];
+            case 3:
+              document.getElementById("row1-10").innerHTML="$"+Prices[26];
+              document.getElementById("row2-10").innerHTML=Hampton[10];
+              document.getElementById("row3-10").innerHTML=Holiday[10];
+              document.getElementById("row4-10").innerHTML=Comfort[10];
+            case 2:
+              document.getElementById("row1-8").innerHTML="$"+Prices[14];
+              document.getElementById("row2-8").innerHTML=Hampton[6];
+              document.getElementById("row3-8").innerHTML=Holiday[6];
+              document.getElementById("row4-8").innerHTML=Comfort[6];
+            case 1:
+              document.getElementById("row1-6").innerHTML="$"+Prices[2];
+              document.getElementById("row2-6").innerHTML=Hampton[2];
+              document.getElementById("row3-6").innerHTML=Holiday[2];
+              document.getElementById("row4-6").innerHTML=Comfort[2];
+            }
+        }
+        if((rate_type=="King")&&(val=="Government")){
+          switch(count){
+            case 9:
+              document.getElementById("row1-22").innerHTML="$"+Prices[99];
+              document.getElementById("row2-22").innerHTML=Hampton[35];
+              document.getElementById("row3-22").innerHTML=Holiday[35];
+              document.getElementById("row4-22").innerHTML=Comfort[35];
+            case 8:
+              document.getElementById("row1-20").innerHTML="$"+Prices[87];
+              document.getElementById("row2-20").innerHTML=Hampton[31];
+              document.getElementById("row3-20").innerHTML=Holiday[31];
+              document.getElementById("row4-20").innerHTML=Comfort[31];
+            case 7:
+              document.getElementById("row1-18").innerHTML="$"+Prices[75];
+              document.getElementById("row2-18").innerHTML=Hampton[27];
+              document.getElementById("row3-18").innerHTML=Holiday[27];
+              document.getElementById("row4-18").innerHTML=Comfort[27];
+            case 6:
+              document.getElementById("row1-16").innerHTML="$"+Prices[63];
+              document.getElementById("row2-16").innerHTML=Hampton[23];
+              document.getElementById("row3-16").innerHTML=Holiday[23];
+              document.getElementById("row4-16").innerHTML=Comfort[23];
+            case 5:
+              document.getElementById("row1-14").innerHTML="$"+Prices[51];
+              document.getElementById("row2-14").innerHTML=Hampton[19];
+              document.getElementById("row3-14").innerHTML=Holiday[19];
+              document.getElementById("row4-14").innerHTML=Comfort[19];
+            case 4:
+              document.getElementById("row1-12").innerHTML="$"+Prices[39];
+              document.getElementById("row2-12").innerHTML=Hampton[15];
+              document.getElementById("row3-12").innerHTML=Holiday[15];
+              document.getElementById("row4-12").innerHTML=Comfort[15];
+            case 3:
+              document.getElementById("row1-10").innerHTML="$"+Prices[27];
+              document.getElementById("row2-10").innerHTML=Hampton[11];
+              document.getElementById("row3-10").innerHTML=Holiday[11];
+              document.getElementById("row4-10").innerHTML=Comfort[11];
+            case 2:
+              document.getElementById("row1-8").innerHTML="$"+Prices[15];
+              document.getElementById("row2-8").innerHTML=Hampton[7];
+              document.getElementById("row3-8").innerHTML=Holiday[7];
+              document.getElementById("row4-8").innerHTML=Comfort[7];
+            case 1:
+              document.getElementById("row1-6").innerHTML="$"+Prices[3];
+              document.getElementById("row2-6").innerHTML=Hampton[3];
+              document.getElementById("row3-6").innerHTML=Holiday[3];
+              document.getElementById("row4-6").innerHTML=Comfort[3];
+            }
+        }
+
+  if((rate_type=="Queen")&&(val=="Rack")){
+          switch(count){
+            case 9:
+              document.getElementById("row1-22").innerHTML="$"+Prices[100];
+              document.getElementById("row2-22").innerHTML=Hampton[32];
+              document.getElementById("row3-22").innerHTML=Holiday[32];
+              document.getElementById("row4-22").innerHTML=Comfort[32];
+            case 8:
+              document.getElementById("row1-20").innerHTML="$"+Prices[88];
+              document.getElementById("row2-20").innerHTML=Hampton[28];
+              document.getElementById("row3-20").innerHTML=Holiday[28];
+              document.getElementById("row4-20").innerHTML=Comfort[28];
+            case 7:
+              document.getElementById("row1-18").innerHTML="$"+Prices[76];
+              document.getElementById("row2-18").innerHTML=Hampton[24];
+              document.getElementById("row3-18").innerHTML=Holiday[24];
+              document.getElementById("row4-18").innerHTML=Comfort[24];
+            case 6:
+              document.getElementById("row1-16").innerHTML="$"+Prices[64];
+              document.getElementById("row2-16").innerHTML=Hampton[20];
+              document.getElementById("row3-16").innerHTML=Holiday[20];
+              document.getElementById("row4-16").innerHTML=Comfort[20];
+            case 5:
+              document.getElementById("row1-14").innerHTML="$"+Prices[52];
+              document.getElementById("row2-14").innerHTML=Hampton[16];
+              document.getElementById("row3-14").innerHTML=Holiday[16];
+              document.getElementById("row4-14").innerHTML=Comfort[16];
+            case 4:
+              document.getElementById("row1-12").innerHTML="$"+Prices[40];
+              document.getElementById("row2-12").innerHTML=Hampton[12];
+              document.getElementById("row3-12").innerHTML=Holiday[12];
+              document.getElementById("row4-12").innerHTML=Comfort[12];
+            case 3:
+              document.getElementById("row1-10").innerHTML="$"+Prices[28];
+              document.getElementById("row2-10").innerHTML=Hampton[8];
+              document.getElementById("row3-10").innerHTML=Holiday[8];
+              document.getElementById("row4-10").innerHTML=Comfort[8];
+            case 2:
+              document.getElementById("row1-8").innerHTML="$"+Prices[16];
+              document.getElementById("row2-8").innerHTML=Hampton[4];
+              document.getElementById("row3-8").innerHTML=Holiday[4];
+              document.getElementById("row4-8").innerHTML=Comfort[4];
+            case 1:
+              document.getElementById("row1-6").innerHTML="$"+Prices[4];
+              document.getElementById("row2-6").innerHTML=Hampton[0];
+              document.getElementById("row3-6").innerHTML=Holiday[0];
+              document.getElementById("row4-6").innerHTML=Comfort[0];
+            }
+        }
+        if((rate_type=="Queen")&&(val=="Last Minute")){
+          switch(count){
+            case 9:
+              document.getElementById("row1-22").innerHTML="$"+Prices[101];
+              document.getElementById("row2-22").innerHTML=Hampton[33];
+              document.getElementById("row3-22").innerHTML=Holiday[33];
+              document.getElementById("row4-22").innerHTML=Comfort[33];
+            case 8:
+              document.getElementById("row1-20").innerHTML="$"+Prices[89];
+              document.getElementById("row2-20").innerHTML=Hampton[29];
+              document.getElementById("row3-20").innerHTML=Holiday[29];
+              document.getElementById("row4-20").innerHTML=Comfort[29];
+            case 7:
+              document.getElementById("row1-18").innerHTML="$"+Prices[77];
+              document.getElementById("row2-18").innerHTML=Hampton[25];
+              document.getElementById("row3-18").innerHTML=Holiday[25];
+              document.getElementById("row4-18").innerHTML=Comfort[25];
+            case 6:
+              document.getElementById("row1-16").innerHTML="$"+Prices[65];
+              document.getElementById("row2-16").innerHTML=Hampton[21];
+              document.getElementById("row3-16").innerHTML=Holiday[21];
+              document.getElementById("row4-16").innerHTML=Comfort[21];
+            case 5:
+              document.getElementById("row1-14").innerHTML="$"+Prices[53];
+              document.getElementById("row2-14").innerHTML=Hampton[17];
+              document.getElementById("row3-14").innerHTML=Holiday[17];
+              document.getElementById("row4-14").innerHTML=Comfort[17];
+            case 4:
+              document.getElementById("row1-12").innerHTML="$"+Prices[41];
+              document.getElementById("row2-12").innerHTML=Hampton[13];
+              document.getElementById("row3-12").innerHTML=Holiday[13];
+              document.getElementById("row4-12").innerHTML=Comfort[13];
+            case 3:
+              document.getElementById("row1-10").innerHTML="$"+Prices[29];
+              document.getElementById("row2-10").innerHTML=Hampton[9];
+              document.getElementById("row3-10").innerHTML=Holiday[9];
+              document.getElementById("row4-10").innerHTML=Comfort[9];
+            case 2:
+              document.getElementById("row1-8").innerHTML="$"+Prices[17];
+              document.getElementById("row2-8").innerHTML=Hampton[5];
+              document.getElementById("row3-8").innerHTML=Holiday[5];
+              document.getElementById("row4-8").innerHTML=Comfort[5];
+            case 1:
+              document.getElementById("row1-6").innerHTML="$"+Prices[5];
+              document.getElementById("row2-6").innerHTML=Hampton[1];
+              document.getElementById("row3-6").innerHTML=Holiday[1];
+              document.getElementById("row4-6").innerHTML=Comfort[1];
+          }
+        }
+          if((rate_type=="Queen")&&(val=="Opaque")){
+          switch(count){
+            case 9:
+              document.getElementById("row1-22").innerHTML="$"+Prices[102];
+              document.getElementById("row2-22").innerHTML=Hampton[34];
+              document.getElementById("row3-22").innerHTML=Holiday[34];
+              document.getElementById("row4-22").innerHTML=Comfort[34];
+            case 8:
+              document.getElementById("row1-20").innerHTML="$"+Prices[90];
+              document.getElementById("row2-20").innerHTML=Hampton[30];
+              document.getElementById("row3-20").innerHTML=Holiday[30];
+              document.getElementById("row4-20").innerHTML=Comfort[30];
+            case 7:
+              document.getElementById("row1-18").innerHTML="$"+Prices[78];
+              document.getElementById("row2-18").innerHTML=Hampton[26];
+              document.getElementById("row3-18").innerHTML=Holiday[26];
+              document.getElementById("row4-18").innerHTML=Comfort[26];
+            case 6:
+              document.getElementById("row1-16").innerHTML="$"+Prices[66];
+              document.getElementById("row2-16").innerHTML=Hampton[22];
+              document.getElementById("row3-16").innerHTML=Holiday[22];
+              document.getElementById("row4-16").innerHTML=Comfort[22];
+            case 5:
+              document.getElementById("row1-14").innerHTML="$"+Prices[54];
+              document.getElementById("row2-14").innerHTML=Hampton[18];
+              document.getElementById("row3-14").innerHTML=Holiday[18];
+              document.getElementById("row4-14").innerHTML=Comfort[18];
+            case 4:
+              document.getElementById("row1-12").innerHTML="$"+Prices[42];
+              document.getElementById("row2-12").innerHTML=Hampton[14];
+              document.getElementById("row3-12").innerHTML=Holiday[14];
+              document.getElementById("row4-12").innerHTML=Comfort[14];
+            case 3:
+              document.getElementById("row1-10").innerHTML="$"+Prices[30];
+              document.getElementById("row2-10").innerHTML=Hampton[10];
+              document.getElementById("row3-10").innerHTML=Holiday[10];
+              document.getElementById("row4-10").innerHTML=Comfort[10];
+            case 2:
+              document.getElementById("row1-8").innerHTML="$"+Prices[18];
+              document.getElementById("row2-8").innerHTML=Hampton[6];
+              document.getElementById("row3-8").innerHTML=Holiday[6];
+              document.getElementById("row4-8").innerHTML=Comfort[6];
+            case 1:
+              document.getElementById("row1-6").innerHTML="$"+Prices[6];
+              document.getElementById("row2-6").innerHTML=Hampton[2];
+              document.getElementById("row3-6").innerHTML=Holiday[2];
+              document.getElementById("row4-6").innerHTML=Comfort[2];
+          }
+        }
+        if((rate_type=="Queen")&&(val=="Government")){
+          switch(count){
+            case 9:
+              document.getElementById("row1-22").innerHTML="$"+Prices[103];
+              document.getElementById("row2-22").innerHTML=Hampton[35];
+              document.getElementById("row3-22").innerHTML=Holiday[35];
+              document.getElementById("row4-22").innerHTML=Comfort[35];
+            case 8:
+              document.getElementById("row1-20").innerHTML="$"+Prices[91];
+              document.getElementById("row2-20").innerHTML=Hampton[31];
+              document.getElementById("row3-20").innerHTML=Holiday[31];
+              document.getElementById("row4-20").innerHTML=Comfort[31];
+            case 7:
+              document.getElementById("row1-18").innerHTML="$"+Prices[79];
+              document.getElementById("row2-18").innerHTML=Hampton[27];
+              document.getElementById("row3-18").innerHTML=Holiday[27];
+              document.getElementById("row4-18").innerHTML=Comfort[27];
+            case 6:
+              document.getElementById("row1-16").innerHTML="$"+Prices[67];
+              document.getElementById("row2-16").innerHTML=Hampton[23];
+              document.getElementById("row3-16").innerHTML=Holiday[23];
+              document.getElementById("row4-16").innerHTML=Comfort[23];
+            case 5:
+              document.getElementById("row1-14").innerHTML="$"+Prices[55];
+              document.getElementById("row2-14").innerHTML=Hampton[19];
+              document.getElementById("row3-14").innerHTML=Holiday[19];
+              document.getElementById("row4-14").innerHTML=Comfort[19];
+            case 4:
+              document.getElementById("row1-12").innerHTML="$"+Prices[43];
+              document.getElementById("row2-12").innerHTML=Hampton[15];
+              document.getElementById("row3-12").innerHTML=Holiday[15];
+              document.getElementById("row4-12").innerHTML=Comfort[15];
+            case 3:
+              document.getElementById("row1-10").innerHTML="$"+Prices[31];
+              document.getElementById("row2-10").innerHTML=Hampton[11];
+              document.getElementById("row3-10").innerHTML=Holiday[11];
+              document.getElementById("row4-10").innerHTML=Comfort[11];
+            case 2:
+              document.getElementById("row1-8").innerHTML="$"+Prices[19];
+              document.getElementById("row2-8").innerHTML=Hampton[7];
+              document.getElementById("row3-8").innerHTML=Holiday[7];
+              document.getElementById("row4-8").innerHTML=Comfort[7];
+            case 1:
+              document.getElementById("row1-6").innerHTML="$"+Prices[7];
+              document.getElementById("row2-6").innerHTML=Hampton[3];
+              document.getElementById("row3-6").innerHTML=Holiday[3];
+              document.getElementById("row4-6").innerHTML=Comfort[3];
+          }
+        }
+
+        if((rate_type=="Suite")&&(val=="Rack")){
+          switch(count){
+            case 9:
+              document.getElementById("row1-22").innerHTML="$"+Prices[104];
+              document.getElementById("row2-22").innerHTML=Hampton[32];
+              document.getElementById("row3-22").innerHTML=Holiday[32];
+              document.getElementById("row4-22").innerHTML=Comfort[32];
+            case 8:
+              document.getElementById("row1-20").innerHTML="$"+Prices[92];
+              document.getElementById("row2-20").innerHTML=Hampton[28];
+              document.getElementById("row3-20").innerHTML=Holiday[28];
+              document.getElementById("row4-20").innerHTML=Comfort[28];
+            case 7:
+              document.getElementById("row1-18").innerHTML="$"+Prices[80];
+              document.getElementById("row2-18").innerHTML=Hampton[24];
+              document.getElementById("row3-18").innerHTML=Holiday[24];
+              document.getElementById("row4-18").innerHTML=Comfort[24];
+            case 6:
+              document.getElementById("row1-16").innerHTML="$"+Prices[68];
+              document.getElementById("row2-16").innerHTML=Hampton[20];
+              document.getElementById("row3-16").innerHTML=Holiday[20];
+              document.getElementById("row4-16").innerHTML=Comfort[20];
+            case 5:
+              document.getElementById("row1-14").innerHTML="$"+Prices[56];
+              document.getElementById("row2-14").innerHTML=Hampton[16];
+              document.getElementById("row3-14").innerHTML=Holiday[16];
+              document.getElementById("row4-14").innerHTML=Comfort[16];
+            case 4:
+              document.getElementById("row1-12").innerHTML="$"+Prices[44];
+              document.getElementById("row2-12").innerHTML=Hampton[12];
+              document.getElementById("row3-12").innerHTML=Holiday[12];
+              document.getElementById("row4-12").innerHTML=Comfort[12];
+            case 3:
+              document.getElementById("row1-10").innerHTML="$"+Prices[32];
+              document.getElementById("row2-10").innerHTML=Hampton[8];
+              document.getElementById("row3-10").innerHTML=Holiday[8];
+              document.getElementById("row4-10").innerHTML=Comfort[8];
+            case 2:
+              document.getElementById("row1-8").innerHTML="$"+Prices[20];
+              document.getElementById("row2-8").innerHTML=Hampton[4];
+              document.getElementById("row3-8").innerHTML=Holiday[4];
+              document.getElementById("row4-8").innerHTML=Comfort[4];
+            case 1:
+              document.getElementById("row1-6").innerHTML="$"+Prices[8];
+              document.getElementById("row2-6").innerHTML=Hampton[0];
+              document.getElementById("row3-6").innerHTML=Holiday[0];
+              document.getElementById("row4-6").innerHTML=Comfort[0];
+            }
+          }
+            if((rate_type=="Suite")&&(val=="Last Minute")){
+            switch(count){
+              case 9:
+                document.getElementById("row1-22").innerHTML="$"+Prices[105];
+                document.getElementById("row2-22").innerHTML=Hampton[33];
+                document.getElementById("row3-22").innerHTML=Holiday[33];
+                document.getElementById("row4-22").innerHTML=Comfort[33];
+              case 8:
+                document.getElementById("row1-20").innerHTML="$"+Prices[93];
+                document.getElementById("row2-20").innerHTML=Hampton[29];
+                document.getElementById("row3-20").innerHTML=Holiday[29];
+                document.getElementById("row4-20").innerHTML=Comfort[29];
+              case 7:
+                document.getElementById("row1-18").innerHTML="$"+Prices[81];
+                document.getElementById("row2-18").innerHTML=Hampton[25];
+                document.getElementById("row3-18").innerHTML=Holiday[25];
+                document.getElementById("row4-18").innerHTML=Comfort[25];
+              case 6:
+                document.getElementById("row1-16").innerHTML="$"+Prices[69];
+                document.getElementById("row2-16").innerHTML=Hampton[21];
+                document.getElementById("row3-16").innerHTML=Holiday[21];
+                document.getElementById("row4-16").innerHTML=Comfort[21];
+              case 5:
+                document.getElementById("row1-14").innerHTML="$"+Prices[57];
+                document.getElementById("row2-14").innerHTML=Hampton[17];
+                document.getElementById("row3-14").innerHTML=Holiday[17];
+                document.getElementById("row4-14").innerHTML=Comfort[17];
+              case 4:
+                document.getElementById("row1-12").innerHTML="$"+Prices[45];
+                document.getElementById("row2-12").innerHTML=Hampton[13];
+                document.getElementById("row3-12").innerHTML=Holiday[13];
+                document.getElementById("row4-12").innerHTML=Comfort[13];
+              case 3:
+                document.getElementById("row1-10").innerHTML="$"+Prices[33];
+                document.getElementById("row2-10").innerHTML=Hampton[9];
+                document.getElementById("row3-10").innerHTML=Holiday[9];
+                document.getElementById("row4-10").innerHTML=Comfort[9];
+              case 2:
+                document.getElementById("row1-8").innerHTML="$"+Prices[21];
+                document.getElementById("row2-8").innerHTML=Hampton[5];
+                document.getElementById("row3-8").innerHTML=Holiday[5];
+                document.getElementById("row4-8").innerHTML=Comfort[5];
+              case 1:
+                document.getElementById("row1-6").innerHTML="$"+Prices[9];
+                document.getElementById("row2-6").innerHTML=Hampton[1];
+                document.getElementById("row3-6").innerHTML=Holiday[1];
+                document.getElementById("row4-6").innerHTML=Comfort[1];
+              }
+            }
+              if((rate_type=="Suite")&&(val=="Opaque")){
+              switch(count){
+                case 9:
+                  document.getElementById("row1-22").innerHTML="$"+Prices[106];
+                  document.getElementById("row2-22").innerHTML=Hampton[34];
+                  document.getElementById("row3-22").innerHTML=Holiday[34];
+                  document.getElementById("row4-22").innerHTML=Comfort[34];
+                case 8:
+                  document.getElementById("row1-20").innerHTML="$"+Prices[94];
+                  document.getElementById("row2-20").innerHTML=Hampton[30];
+                  document.getElementById("row3-20").innerHTML=Holiday[30];
+                  document.getElementById("row4-20").innerHTML=Comfort[30];
+                case 7:
+                  document.getElementById("row1-18").innerHTML="$"+Prices[80];
+                  document.getElementById("row2-18").innerHTML=Hampton[26];
+                  document.getElementById("row3-18").innerHTML=Holiday[26];
+                  document.getElementById("row4-18").innerHTML=Comfort[26];
+                case 6:
+                  document.getElementById("row1-16").innerHTML="$"+Prices[70];
+                  document.getElementById("row2-16").innerHTML=Hampton[22];
+                  document.getElementById("row3-16").innerHTML=Holiday[22];
+                  document.getElementById("row4-16").innerHTML=Comfort[22];
+                case 5:
+                  document.getElementById("row1-14").innerHTML="$"+Prices[58];
+                  document.getElementById("row2-14").innerHTML=Hampton[18];
+                  document.getElementById("row3-14").innerHTML=Holiday[18];
+                  document.getElementById("row4-14").innerHTML=Comfort[18];
+                case 4:
+                  document.getElementById("row1-12").innerHTML="$"+Prices[46];
+                  document.getElementById("row2-12").innerHTML=Hampton[14];
+                  document.getElementById("row3-12").innerHTML=Holiday[14];
+                  document.getElementById("row4-12").innerHTML=Comfort[14];
+                case 3:
+                  document.getElementById("row1-10").innerHTML="$"+Prices[34];
+                  document.getElementById("row2-10").innerHTML=Hampton[10];
+                  document.getElementById("row3-10").innerHTML=Holiday[10];
+                  document.getElementById("row4-10").innerHTML=Comfort[10];
+                case 2:
+                  document.getElementById("row1-8").innerHTML="$"+Prices[22];
+                  document.getElementById("row2-8").innerHTML=Hampton[6];
+                  document.getElementById("row3-8").innerHTML=Holiday[6];
+                  document.getElementById("row4-8").innerHTML=Comfort[6];
+                case 1:
+                  document.getElementById("row1-6").innerHTML="$"+Prices[10];
+                  document.getElementById("row2-6").innerHTML=Hampton[2];
+                  document.getElementById("row3-6").innerHTML=Holiday[2];
+                  document.getElementById("row4-6").innerHTML=Comfort[2];
+                }
+              }
+            if((rate_type=="Suite")&&(val=="Government")){
+              switch(count){
+                case 9:
+                  document.getElementById("row1-22").innerHTML="$"+Prices[107];
+                  document.getElementById("row2-22").innerHTML=Hampton[35];
+                  document.getElementById("row3-22").innerHTML=Holiday[35];
+                  document.getElementById("row4-22").innerHTML=Comfort[35];
+                case 8:
+                  document.getElementById("row1-20").innerHTML="$"+Prices[95];
+                  document.getElementById("row2-20").innerHTML=Hampton[31];
+                  document.getElementById("row3-20").innerHTML=Holiday[31];
+                  document.getElementById("row4-20").innerHTML=Comfort[31];
+                case 7:
+                  document.getElementById("row1-18").innerHTML="$"+Prices[83];
+                  document.getElementById("row2-18").innerHTML=Hampton[27];
+                  document.getElementById("row3-18").innerHTML=Holiday[27];
+                  document.getElementById("row4-18").innerHTML=Comfort[27];
+                case 6:
+                  document.getElementById("row1-16").innerHTML="$"+Prices[71];
+                  document.getElementById("row2-16").innerHTML=Hampton[23];
+                  document.getElementById("row3-16").innerHTML=Holiday[23];
+                  document.getElementById("row4-16").innerHTML=Comfort[23];
+                case 5:
+                  document.getElementById("row1-14").innerHTML="$"+Prices[59];
+                  document.getElementById("row2-14").innerHTML=Hampton[19];
+                  document.getElementById("row3-14").innerHTML=Holiday[19];
+                  document.getElementById("row4-14").innerHTML=Comfort[19];
+                case 4:
+                  document.getElementById("row1-12").innerHTML="$"+Prices[47];
+                  document.getElementById("row2-12").innerHTML=Hampton[15];
+                  document.getElementById("row3-12").innerHTML=Holiday[15];
+                  document.getElementById("row4-12").innerHTML=Comfort[15];
+                case 3:
+                  document.getElementById("row1-10").innerHTML="$"+Prices[35];
+                  document.getElementById("row2-10").innerHTML=Hampton[11];
+                  document.getElementById("row3-10").innerHTML=Holiday[11];
+                  document.getElementById("row4-10").innerHTML=Comfort[11];
+                case 2:
+                  document.getElementById("row1-8").innerHTML="$"+Prices[23];
+                  document.getElementById("row2-8").innerHTML=Hampton[7];
+                  document.getElementById("row3-8").innerHTML=Holiday[7];
+                  document.getElementById("row4-8").innerHTML=Comfort[7];
+                case 1:
+                  document.getElementById("row1-6").innerHTML="$"+Prices[11];
+                  document.getElementById("row2-6").innerHTML=Hampton[3];
+                  document.getElementById("row3-6").innerHTML=Holiday[3];
+                  document.getElementById("row4-6").innerHTML=Comfort[3];
+                }
+              }
+      }
+
+      function update_table2(){
+
+      /* document.getElementById("RLselector").addEventListener("change", updation);
+        document.getElementById("RTselector").addEventListener("change", updation);*/
+
+        switch(count){
+          case 9:
+            document.getElementById("row1-22").innerHTML="$"+Prices[96];
+            document.getElementById("row2-22").innerHTML=Hampton[32];
+            document.getElementById("row3-22").innerHTML=Holiday[32];
+            document.getElementById("row4-22").innerHTML=Comfort[32];
+          case 8:
+            document.getElementById("row1-20").innerHTML="$"+Prices[84];
+            document.getElementById("row2-20").innerHTML=Hampton[28];
+            document.getElementById("row3-20").innerHTML=Holiday[28];
+            document.getElementById("row4-20").innerHTML=Comfort[28];
+          case 7:
+            document.getElementById("row1-18").innerHTML="$"+Prices[72];
+            document.getElementById("row2-18").innerHTML=Hampton[24];
+            document.getElementById("row3-18").innerHTML=Holiday[24];
+            document.getElementById("row4-18").innerHTML=Comfort[24];
+          case 6:
+            document.getElementById("row1-16").innerHTML="$"+Prices[60];
+            document.getElementById("row2-16").innerHTML=Hampton[20];
+            document.getElementById("row3-16").innerHTML=Holiday[20];
+            document.getElementById("row4-16").innerHTML=Comfort[20];
+          case 5:
+            document.getElementById("row1-14").innerHTML="$"+Prices[48];
+            document.getElementById("row2-14").innerHTML=Hampton[16];
+            document.getElementById("row3-14").innerHTML=Holiday[16];
+            document.getElementById("row4-14").innerHTML=Comfort[16];
+          case 4:
+            document.getElementById("row1-12").innerHTML="$"+Prices[36];
+            document.getElementById("row2-12").innerHTML=Hampton[12];
+            document.getElementById("row3-12").innerHTML=Holiday[12];
+            document.getElementById("row4-12").innerHTML=Comfort[12];
+          case 3:
+            document.getElementById("row1-10").innerHTML="$"+Prices[24];
+            document.getElementById("row2-10").innerHTML=Hampton[8];
+            document.getElementById("row3-10").innerHTML=Holiday[8];
+            document.getElementById("row4-10").innerHTML=Comfort[8];
+          case 2:
+            document.getElementById("row1-8").innerHTML="$"+Prices[12];
+            document.getElementById("row2-8").innerHTML=Hampton[4];
+            document.getElementById("row3-8").innerHTML=Holiday[4];
+            document.getElementById("row4-8").innerHTML=Comfort[4];
+          case 1:
+            document.getElementById("row1-6").innerHTML="$"+Prices[0];
+            document.getElementById("row2-6").innerHTML=Hampton[0];
+            document.getElementById("row3-6").innerHTML=Holiday[0];
+            document.getElementById("row4-6").innerHTML=Comfort[0];
+        }
+
       }
 
     </script>
@@ -655,7 +1230,7 @@
 
               docClient.get(params, function(err, data) {
                       if (err) {
-                          console.log("error");
+                          console.log("error in getting sold");
                       } else {
                           console.log(data);
                           Sold[0]=data.Item.K_rack_Sold;
@@ -745,11 +1320,17 @@
     </table>
 <br>
 
- <select id="RLselector" class="select">
+ <select id="RLselector" class="select" onchange="updation()">
    <option value="Rack"><b>Rack</b></option>
    <option value="Last Minute"><b>Last Minute</b></option>
    <option value="Opaque"><b>Opaque</b></option>
    <option value="Government"><b>Government</b></option>
+ </select>
+
+ <select id="RTselector" class="select" onchange="updation()">
+   <option value="King"><b>King</b></option>
+   <option value="Queen"><b>Queen</b></option>
+   <option value="Suite"><b>Suite QQ</b></option>
  </select>
 
     <table id="compare">
@@ -848,9 +1429,9 @@
 <span id="time-display">05:00</span>
 
 
-<a href="summary.html">
-    <img id="close" border="0" alt="hotel" src="../assets/images/close.png" width="65" height="65"></img>
-</a>
+
+    <img id="close" border="0" alt="hotel" src="../assets/images/close.png" width="65" height="65" onclick="addup()"></img>
+
 
 <img id="bush" border="0" alt="bush" src="../assets/images/8.png" width="400" height="120"></img>
 <img id="bush2" border="0" alt="bush" src="../assets/images/8.png" width="400" height="120"></img>
@@ -921,7 +1502,7 @@ function popup_BW() {
 </script>
 
 <div id ="car_cont">
-<img id="car" border="0" alt="car" src="../assets/images/car1.png" width="170" height="170"></img>
+<img id="car" border="0" alt="car" src="../assets/images/car2.png" width="170" height="170"></img>
 </div>
   </div>
 
