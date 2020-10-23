@@ -52,14 +52,28 @@ def calc_spread_gov(event):
     total_sold=sold_step_1(event)
     sold={}
     for r in room_types:
-        if level_closure['gov']==0 or user_rate[r+'_gov_Price']>user_rate[r+'_rack_Price']:
+        if level_closure['gov']==0:
+            sold[r+'_gov_Sold']=int(0)
+        elif user_rate[r+'_gov_Price']>=user_rate[r+'_rack_Price']:
             sold[r+'_gov_Sold']=int(0)
         elif level_closure['gov']==1 and user_rate[r+'_gov_Price']<user_rate[r+'_rack_Price']:
-            sold[r+'_gov_Sold']=int(badweek_data[r+'_gov'])
-        sold[r+'_last_Sold']=int((level_closure['last']*perc[r+'_last_Per'])/((level_closure['last']*perc[r+'_last_Per'])+(level_closure['opaque']*perc[r+'_opaque_Per'])+(level_closure['gov']*perc[r+'_gov_Per'])))
-        sold[r+'_opaque_Sold']=int((level_closure['opaque']*perc[r+'_opaque_Per'])/((level_closure['last']*perc[r+'_last_Per'])+(level_closure['opaque']*perc[r+'_opaque_Per'])+(level_closure['gov']*perc[r+'_gov_Per'])))
-        sold[r+'_rack_Sold']=int(total_sold[r]-(sold[r+'_gov_Sold']+sold[r+'_opaque_Sold']+sold[r+'_last_Sold']))
-
+            sold[r+'_gov_Sold']=min(total_sold[r],int(badweek_data[r+'_gov']))
+        total_sold[r]=total_sold[r]-sold[r+'_gov_Sold']
+        if level_closure['last']==0:
+            sold[r+'_last_Sold']=int(0)
+        else:
+            sold[r+'_last_Sold']=min(total_sold[r],int((level_closure['last']*perc[r+'_last_Per'])/((level_closure['last']*perc[r+'_last_Per'])+(level_closure['opaque']*perc[r+'_opaque_Per'])+(level_closure['gov']*perc[r+'_gov_Per']))))
+        total_sold[r]=total_sold[r]-sold[r+'_last_Sold']
+        if level_closure['opaque']==0:
+            sold[r+'_opaque_Sold']=int(0)
+        else:
+            sold[r+'_opaque_Sold']=min(total_sold[r],int((level_closure['opaque']*perc[r+'_opaque_Per'])/((level_closure['last']*perc[r+'_last_Per'])+(level_closure['opaque']*perc[r+'_opaque_Per'])+(level_closure['gov']*perc[r+'_gov_Per']))))
+        total_sold[r]=total_sold[r]-sold[r+'_opaque_Sold']
+        if level_closure['rack']==0:
+            sold[r+'_rack_Sold']=int(0)
+        else:
+            sold[r+'_rack_Sold']=int(total_sold[r])
+    print(sold)
     return sold
     
 def prob_adj_1(level_closure):
@@ -100,6 +114,7 @@ def sold_step_1(event):
     room_types=['K','Q','S']
     for index,i in enumerate(market_demand):
         bw_sold[room_types[index]]=(int(i*prob_calc(event,BW_LRA,comp_LRA)))
+    print(bw_sold)
     return bw_sold
     
 def put_price(event):
