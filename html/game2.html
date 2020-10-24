@@ -54,7 +54,6 @@
     var King_Rack,King_Last,King_Opaque,King_Gov;
     var Queen_Rack,Queen_Last,Queen_Opaque,Queen_Gov;
     var Suite_Rack,Suite_Last,Suite_Opaque,Suite_Gov;
-    var car_position=420;
     var K_rack_rev,Q_rack_rev,S_rack_rev,E_rack_rev,K_last_rev,Q_last_rev,S_last_rev,E_last_rev,K_opaque_rev,Q_opaque_rev,S_opaque_rev,E_opaque_rev,K_gov_rev,Q_gov_rev,S_gov_rev,E_gov_rev;
     var K_tr,K_nr,K_ts,K_adr,Q_tr,Q_nr,Q_ts,Q_adr,S_tr,S_nr,S_ts,S_adr,E_tr=0,E_nr,E_ts=0,E_adr;
     var Sold = new Array(16);
@@ -74,6 +73,8 @@
        countdown();
        sethour();
        fifteen();
+       display();
+       move_car();
      }
 
     function sethour(){
@@ -96,8 +97,8 @@
     }
 
     function alertFunc() {
-      var rev_sum=0;
-      var sold_sum=0;
+      var rev_sum=2642;
+      var sold_sum=30;
       for(var l=0;l<9;l++){
         rev_sum=rev_sum+tot_rev[l];
         sold_sum=sold_sum+tot_sold[l];
@@ -108,15 +109,22 @@
     }
 
     function move_car(){
-      var elem = document.getElementById("car");
+//      var reachpts = [975,1230];
+//      var pt=parseInt(2*Math.random());
+      var elem = document.getElementById("car_cont");
+      var random_car = parseInt(4*Math.random())+1;
+      elem.innerHTML="<img id='car' border='0' src='../assets/images/car"+random_car+".png' width='170' height='170'></img>";
+      var car_element = document.getElementById("car");
       var pos = 0;
-      var id = setInterval(frame, 5);
+      var id = setInterval(frame,2);
       function frame() {
-        if (pos == 550) {
+        if (pos == 1230) {
           clearInterval(id);
+          car_element.remove();
+          move_car();
         } else {
           pos++;
-          elem.style.left = pos + "px";
+          car_element.style.left = pos + "px";
         }
       }
     }
@@ -250,8 +258,124 @@
     document.getElementById('K_rack').innerHTML= "NA";
     document.getElementById('Q_rack').innerHTML= "NA";
     document.getElementById('S_rack').innerHTML= "NA";
-
   }
+  }
+
+
+  function display(){
+    document.getElementById('K_last').innerHTML="$82";
+    document.getElementById('Q_last').innerHTML="$86";
+    document.getElementById('S_last').innerHTML="$95";
+
+    document.getElementById('K_opaque').innerHTML= "$60";
+    document.getElementById('Q_opaque').innerHTML= "$63";
+    document.getElementById('S_opaque').innerHTML= "$70";
+
+    document.getElementById('K_gov').innerHTML= "$96";
+    document.getElementById('Q_gov').innerHTML= "$96";
+    document.getElementById('S_gov').innerHTML= "$96";
+
+
+    document.getElementById("t1-11").innerHTML="$91";
+    document.getElementById("t1-21").innerHTML="$82";
+    document.getElementById("t1-31").innerHTML="$60";
+    document.getElementById("t1-41").innerHTML="$96";
+    document.getElementById("t1-12").innerHTML="3";
+    document.getElementById("t1-22").innerHTML="5";
+    document.getElementById("t1-32").innerHTML="1";
+    document.getElementById("t1-42").innerHTML="5";
+
+    document.getElementById("t1-13").innerHTML="$273";
+    document.getElementById("t1-23").innerHTML="$410";
+    document.getElementById("t1-33").innerHTML="$60";
+    document.getElementById("t1-43").innerHTML="$480";
+
+    document.getElementById("tr").innerHTML="$1223";
+    document.getElementById("nr").innerHTML="$803";
+    document.getElementById("ns").innerHTML="$14";
+    document.getElementById("adr").innerHTML="$87.36";
+
+
+    document.getElementById("rb1").addEventListener("click", () => {
+      document.getElementById("t1-11").innerHTML="$91";
+      document.getElementById("t1-21").innerHTML="$82";
+      document.getElementById("t1-31").innerHTML="$60";
+      document.getElementById("t1-41").innerHTML="$96";
+      document.getElementById("t1-12").innerHTML="3";
+      document.getElementById("t1-22").innerHTML="5";
+      document.getElementById("t1-32").innerHTML="1";
+      document.getElementById("t1-42").innerHTML="5";
+
+      document.getElementById("t1-13").innerHTML="$273";
+      document.getElementById("t1-23").innerHTML="$410";
+      document.getElementById("t1-33").innerHTML="$60";
+      document.getElementById("t1-43").innerHTML="$480";
+
+      document.getElementById("tr").innerHTML="$1223";
+      document.getElementById("nr").innerHTML="$803";
+      document.getElementById("ns").innerHTML="$14";
+      document.getElementById("adr").innerHTML="$87.36";
+    });
+    document.getElementById("rb2").addEventListener("click", () => {
+      document.getElementById("t1-11").innerHTML="$96";
+      document.getElementById("t1-21").innerHTML="$86";
+      document.getElementById("t1-31").innerHTML="$63";
+      document.getElementById("t1-41").innerHTML="$96";
+      document.getElementById("t1-12").innerHTML="3";
+      document.getElementById("t1-22").innerHTML="10";
+      document.getElementById("t1-32").innerHTML="0";
+      document.getElementById("t1-42").innerHTML="0";
+
+      document.getElementById("t1-13").innerHTML="$288";
+      document.getElementById("t1-23").innerHTML="$860";
+      document.getElementById("t1-33").innerHTML="$0";
+      document.getElementById("t1-43").innerHTML="$0";
+
+      document.getElementById("tr").innerHTML="$1148";
+      document.getElementById("nr").innerHTML="$758";
+      document.getElementById("ns").innerHTML="$13";
+      document.getElementById("adr").innerHTML="$88.31";
+    });
+    document.getElementById("rb3").addEventListener("click", () => {
+      document.getElementById("t1-11").innerHTML="$106";
+      document.getElementById("t1-21").innerHTML="$95";
+      document.getElementById("t1-31").innerHTML="$70";
+      document.getElementById("t1-41").innerHTML="$96";
+      document.getElementById("t1-12").innerHTML="1";
+      document.getElementById("t1-22").innerHTML="1";
+      document.getElementById("t1-32").innerHTML="1";
+      document.getElementById("t1-42").innerHTML="0";
+
+      document.getElementById("t1-13").innerHTML="$106";
+      document.getElementById("t1-23").innerHTML="$95";
+      document.getElementById("t1-33").innerHTML="$70";
+      document.getElementById("t1-43").innerHTML="$0";
+
+      document.getElementById("tr").innerHTML="$271";
+      document.getElementById("nr").innerHTML="$181";
+      document.getElementById("ns").innerHTML="$3";
+      document.getElementById("adr").innerHTML="$90.33";
+      });
+
+      document.getElementById("rb4").addEventListener("click", () => {
+      document.getElementById("t1-11").innerHTML="$91/$96/$106";
+      document.getElementById("t1-21").innerHTML="$82/$86/$95";
+      document.getElementById("t1-31").innerHTML="$60/$63/$70";
+      document.getElementById("t1-41").innerHTML="$96/$96/$96";
+      document.getElementById("t1-12").innerHTML="7";
+      document.getElementById("t1-22").innerHTML="16";
+      document.getElementById("t1-32").innerHTML="2";
+      document.getElementById("t1-42").innerHTML="5";
+      document.getElementById("t1-13").innerHTML="$667";
+      document.getElementById("t1-23").innerHTML="$1365";
+      document.getElementById("t1-33").innerHTML="$130";
+      document.getElementById("t1-43").innerHTML="$480";
+
+      document.getElementById("tr").innerHTML="$2642";
+      document.getElementById("nr").innerHTML="$1742";
+      document.getElementById("ns").innerHTML="$30";
+      document.getElementById("adr").innerHTML="$88.07";
+    });
   }
     </script>
 
@@ -277,7 +401,6 @@
       function start(){
           save_price();
           report();
-          move_car();
           move_star();
       }
 
@@ -372,8 +495,8 @@
       }
 
       function addup(){
-        var rev_sum=0;
-        var sold_sum=0;
+        var rev_sum=2642;
+        var sold_sum=30;
         for(var l=0;l<9;l++){
           rev_sum=rev_sum+tot_rev[l];
           sold_sum=sold_sum+tot_sold[l];
@@ -436,10 +559,10 @@
         S_nr=S_tr-(S_ts*30);
         E_nr=E_tr-(E_ts*30);
 
-        K_adr=K_tr/K_ts;
-        Q_adr=Q_tr/Q_ts;
-        S_adr=S_tr/S_ts;
-        E_adr=E_tr/E_ts;
+        K_adr=(K_tr/K_ts).toFixed(2);
+        Q_adr=(Q_tr/Q_ts).toFixed(2);
+        S_adr=(S_tr/S_ts).toFixed(2);
+        E_adr=(E_tr/E_ts).toFixed(2);
 
         tot_rev[count-1]=E_tr;
         tot_sold[count-1]=E_ts;
@@ -459,6 +582,26 @@
       }
 
       function update_table1(){
+
+        calc();
+        document.getElementById("t1-11").innerHTML="$"+King_Rack;
+        document.getElementById("t1-21").innerHTML="$"+King_Last;
+        document.getElementById("t1-31").innerHTML="$"+King_Opaque;
+        document.getElementById("t1-41").innerHTML="$"+King_Gov;
+        document.getElementById("t1-12").innerHTML=Sold[0];
+        document.getElementById("t1-22").innerHTML=Sold[1];
+        document.getElementById("t1-32").innerHTML=Sold[2];
+        document.getElementById("t1-42").innerHTML=Sold[3];
+
+        document.getElementById("t1-13").innerHTML="$"+K_rack_rev;
+        document.getElementById("t1-23").innerHTML="$"+K_last_rev;
+        document.getElementById("t1-33").innerHTML="$"+K_opaque_rev;
+        document.getElementById("t1-43").innerHTML="$"+K_gov_rev;
+
+        document.getElementById("tr").innerHTML="$"+K_tr;
+        document.getElementById("nr").innerHTML="$"+K_nr;
+        document.getElementById("ns").innerHTML="$"+K_ts;
+        document.getElementById("adr").innerHTML="$"+K_adr;
 
         document.getElementById("rb1").addEventListener("click", () => {
           calc();
@@ -549,9 +692,6 @@
 
 
       function updation(){
-        console.log("hi");
-        console.log(val);
-        console.log(rate_type);
 
             val= document.getElementById("RLselector").value;
             rate_type= document.getElementById("RTselector").value;
@@ -1428,10 +1568,7 @@
 
 <span id="time-display">05:00</span>
 
-
-
     <img id="close" border="0" alt="hotel" src="../assets/images/close.png" width="65" height="65" onclick="addup()"></img>
-
 
 <img id="bush" border="0" alt="bush" src="../assets/images/8.png" width="400" height="120"></img>
 <img id="bush2" border="0" alt="bush" src="../assets/images/8.png" width="400" height="120"></img>
@@ -1501,9 +1638,8 @@ function popup_BW() {
 }
 </script>
 
-<div id ="car_cont">
-<img id="car" border="0" alt="car" src="../assets/images/car2.png" width="170" height="170"></img>
-</div>
+<div id ="car_cont"></div>
+
   </div>
 
   <div id="bottom">

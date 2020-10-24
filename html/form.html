@@ -3,6 +3,8 @@
 <head>
   <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>
   <script>
+ var cc=0;
+
   AWS.config.update({
   region: "us-east-1",
   endpoint: "https://dynamodb.us-east-1.amazonaws.com",
@@ -13,6 +15,9 @@
   var docClient = new AWS.DynamoDB.DocumentClient();
 
   function createItem() {
+    document.getElementById("submitbutton").innerHTML="NEXT";
+       cc=cc+1;
+    if(cc==1){
   var email= document.getElementById('email').value;
   var firstname= document.getElementById('fname').value;
   var lastname= document.getElementById('lname').value;
@@ -36,7 +41,9 @@
     });
 
     sessionStorage.setItem("User_email", email);
-    console.log(sessionStorage.getItem("User_email"));
+  }else{
+    window.location.href="video.html";
+  }
   }
   </script>
 
@@ -54,20 +61,20 @@
 
 <div id="info">
 <form>
-  <img border="0" alt="name" src="../assets/images/name.png" width="90" height="90"><br>
+  <img id="icon1" border="0" alt="name" src="../assets/images/name.png" width="90" height="90"><br>
   <input type="text" id="fname" name="fname" placeholder="Your first name.." autofocus><br>
   <input type="text" id="lname" name="lname" placeholder="Your last name.."><br>
-  <img border="0" alt="email" src="../assets/images/email.png" width="70" height="70" required><br>
+
+  <img id="icon2" border="0" alt="email" src="../assets/images/email.png" width="70" height="70" required><br>
   <input type="email" id="email" name="email" placeholder="BW email ID.."><br>
-  <img border="0" alt="property" src="../assets/images/prop.png" width="120" height="120"><br>
+
+  <img id="icon3" border="0" alt="property" src="../assets/images/prop.png" width="120" height="120"><br>
   <input type="text" id="pid" name="pid" placeholder="Your property ID.." maxlength="5"><br><br>
+
   <button id="submitbutton" type=button onclick="createItem()">SUBMIT</button>
 </form>
 </div>
 
-<a href="video.html">
-<img border="0" alt="Next" src="../assets/images/next.png" width="100" height="100">
-</a>
 
 
 </div>
