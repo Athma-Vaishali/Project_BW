@@ -294,7 +294,7 @@
 
     document.getElementById("tr").innerHTML="$1223";
     document.getElementById("nr").innerHTML="$803";
-    document.getElementById("ns").innerHTML="$14";
+    document.getElementById("ns").innerHTML="14";
     document.getElementById("adr").innerHTML="$87.36";
 
   if(rate_type=="King"){
@@ -314,7 +314,7 @@
 
       document.getElementById("tr").innerHTML="$1223";
       document.getElementById("nr").innerHTML="$803";
-      document.getElementById("ns").innerHTML="$14";
+      document.getElementById("ns").innerHTML="14";
       document.getElementById("adr").innerHTML="$87.36";
      }
     if(rate_type=="Queen"){
@@ -334,7 +334,7 @@
 
       document.getElementById("tr").innerHTML="$1148";
       document.getElementById("nr").innerHTML="$758";
-      document.getElementById("ns").innerHTML="$13";
+      document.getElementById("ns").innerHTML="13";
       document.getElementById("adr").innerHTML="$88.31";
     }
 
@@ -355,7 +355,7 @@
 
       document.getElementById("tr").innerHTML="$271";
       document.getElementById("nr").innerHTML="$181";
-      document.getElementById("ns").innerHTML="$3";
+      document.getElementById("ns").innerHTML="3";
       document.getElementById("adr").innerHTML="$90.33";
       }
 
@@ -375,7 +375,7 @@
 
       document.getElementById("tr").innerHTML="$2642";
       document.getElementById("nr").innerHTML="$1742";
-      document.getElementById("ns").innerHTML="$30";
+      document.getElementById("ns").innerHTML="30";
       document.getElementById("adr").innerHTML="$88.07";
     }
   }
@@ -604,7 +604,7 @@
 
         document.getElementById("tr").innerHTML="$"+K_tr;
         document.getElementById("nr").innerHTML="$"+K_nr;
-        document.getElementById("ns").innerHTML="$"+K_ts;
+        document.getElementById("ns").innerHTML=K_ts;
         document.getElementById("adr").innerHTML="$"+K_adr;
 
         if(rate_type=="King"){
@@ -625,7 +625,7 @@
 
           document.getElementById("tr").innerHTML="$"+K_tr;
           document.getElementById("nr").innerHTML="$"+K_nr;
-          document.getElementById("ns").innerHTML="$"+K_ts;
+          document.getElementById("ns").innerHTML=K_ts;
           document.getElementById("adr").innerHTML="$"+K_adr;
          }
          if(rate_type=="Queen"){
@@ -646,7 +646,7 @@
 
           document.getElementById("tr").innerHTML="$"+Q_tr;
           document.getElementById("nr").innerHTML="$"+Q_nr;
-          document.getElementById("ns").innerHTML="$"+Q_ts;
+          document.getElementById("ns").innerHTML=Q_ts;
           document.getElementById("adr").innerHTML="$"+Q_adr;
           }
           if(rate_type=="Suite"){
@@ -667,7 +667,7 @@
 
           document.getElementById("tr").innerHTML="$"+S_tr;
           document.getElementById("nr").innerHTML="$"+S_nr;
-          document.getElementById("ns").innerHTML="$"+S_ts;
+          document.getElementById("ns").innerHTML=S_ts;
           document.getElementById("adr").innerHTML="$"+S_adr;
           }
 
@@ -688,7 +688,7 @@
 
           document.getElementById("tr").innerHTML="$"+E_tr;
           document.getElementById("nr").innerHTML="$"+E_nr;
-          document.getElementById("ns").innerHTML="$"+E_ts;
+          document.getElementById("ns").innerHTML=E_ts;
           document.getElementById("adr").innerHTML="$"+E_adr;
           }
       }
@@ -1484,7 +1484,6 @@
         <th>6:00 PM</th>
         <th>8:00 PM</th>
         <th>10:00 PM</th>
-        <th>12:00 AM</th>
       </tr>
       <tr>
         <th>Best Western Plus</th>
@@ -1497,7 +1496,6 @@
         <td id="row1-18"></td>
         <td id="row1-20"></td>
         <td id="row1-22"></td>
-        <td id="row1-24"></td>
       </tr>
       <tr>
         <th>Hampton Inn</th>
@@ -1510,7 +1508,6 @@
         <td id="row2-18"></td>
         <td id="row2-20"></td>
         <td id="row2-22"></td>
-        <td id="row2-24"></td>
       </tr>
       <tr>
         <th>Holiday Inn Express</th>
@@ -1523,7 +1520,6 @@
         <td id="row3-18"></td>
         <td id="row3-20"></td>
         <td id="row3-22"></td>
-        <td id="row3-24"></td>
       </tr>
       <tr>
         <th>Comfort Inn</th>
@@ -1536,7 +1532,6 @@
         <td id="row4-18"></td>
         <td id="row4-20"></td>
         <td id="row4-22"></td>
-        <td id="row4-24"></td>
       </tr>
     </table>
 
@@ -1630,7 +1625,6 @@ function popup_c3() {
   popup.classList.toggle("show3");
 }
 
-// When the user clicks on div, open the popup
 function popup_BW() {
   var popup = document.getElementById("myPopup");
   popup.classList.toggle("show");
