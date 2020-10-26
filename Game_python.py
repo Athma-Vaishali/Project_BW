@@ -107,13 +107,19 @@ def sold_step_1(event):
     market_demand=md[str(event['gametime'])] #game_time
     user_rate=get(event)
     keys=["S_opaque_Price","K_rack_Price","Q_opaque_Price","K_opaque_Price","S_rack_Price","Q_rack_Price","K_gov_Price","S_gov_Price","Q_gov_Price","S_last_Price","K_last_Price","Q_last_Price"]
-    ur = { key: user_rate[key] if user_rate[key]!=None else 100000 for key in keys }
-    BW_LRA=min(list(ur.values()))
-    comp_LRA={'8':88,'10':Decimal(88.6),'12':Decimal(91.3),'14':Decimal(90.6),'16':Decimal(89.6),'18':Decimal(91.3),'20':92,'22':Decimal(93.6),'24':96}
-    bw_sold={}
     room_types=['K','Q','S']
-    for index,i in enumerate(market_demand):
-        bw_sold[room_types[index]]=(int(i*prob_calc(event,BW_LRA,comp_LRA)))
+    BW_LRA={}
+    comp_LRA={}
+    bw_sold={}
+    comp_LRA['K']={'8':88,'10':Decimal(88.6),'12':Decimal(91.3),'14':Decimal(90.6),'16':Decimal(89.6),'18':Decimal(91.3),'20':92,'22':Decimal(93.6),'24':96}
+    comp_LRA['Q']={'8':88,'10':Decimal(88.6),'12':Decimal(91.3),'14':Decimal(90.6),'16':Decimal(89.6),'18':Decimal(91.3),'20':92,'22':Decimal(93.6),'24':96}
+    comp_LRA['S']={'8':88,'10':Decimal(88.6),'12':Decimal(91.3),'14':Decimal(90.6),'16':Decimal(89.6),'18':Decimal(91.3),'20':92,'22':Decimal(93.6),'24':96}
+    for index,i in enumerate(room_types):
+        keys1=[i+"_opaque_Price",i+"_last_Price",i+"_rack_Price",i+"_gov_Price"]
+        ur = { key: user_rate[key] if user_rate[key]!=None else 100000 for key in keys1 }
+        BW_LRA[i]=min(list(ur.values()))
+
+        bw_sold[i]=(int(market_demand[index]*prob_calc(event,BW_LRA[i],comp_LRA[i])))
     print(bw_sold)
     return bw_sold
     
