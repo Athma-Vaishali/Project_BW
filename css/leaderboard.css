@@ -1,6 +1,7 @@
 #Leaderboard{
   position:absolute;
-  left:510px;
+  text-align: center;
+  left:480px;
   top:150px;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
@@ -12,16 +13,42 @@
 }
 
 #Leaderboard td{
-  width: 120px;
+  width: 180px;
 }
 #Leaderboard tr{background-color: #f2f2f2;}
 
-#Leaderboard tr:hover {background-color: #ddd;}
+#Leaderboard tr:hover {background-color: #CAB7B7;}
 
 #Leaderboard th {
   padding-top: 12px;
   padding-bottom: 12px;
-  text-align: left;
+  text-align: center;
   background-color: #A4A8FA;
   color: black;
+}
+
+#t1{
+  position:absolute;
+  top:25%;
+  left:55px;
+  animation: hue 1.5s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes hue {
+  0% { filter: hue-rotate(0deg); }
+  10% { filter: hue-rotate(-5deg); }
+  20% { filter: hue-rotate(-10deg); }
+  30% { filter: hue-rotate(-15deg); }
+  40% { filter: hue-rotate(-10deg); }
+  50% { filter: hue-rotate(0deg); }
+  60% { filter: hue-rotate(10deg); }
+  70% { filter: hue-rotate(15deg); }
+  80% { filter: hue-rotate(10deg); }
+  90% { filter: hue-rotate(5deg); }
+  100% { filter: hue-rotate(0deg); }
+
+  0% {width: 320px; height:320px;}
+  50% {width: 330px; height:330px;}
+  100% {width: 320px; height:320px;}
 }

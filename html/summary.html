@@ -10,6 +10,34 @@
   a:hover{
   filter:hue-rotate(90deg);
   }
+
+.shake{
+  position: absolute;
+  top:20%;
+  animation: shake 1.5s;
+  animation-iteration-count: infinite;
+}
+
+@keyframes shake {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+  #mon{
+    left: 950px;
+  }
+  #tre{
+    left: 50px;
+  }
   </style>
 </head>
 
@@ -19,6 +47,8 @@
 
 <h2>GAME SUMMARY</h2>
 <h3>Your Results Are In!</h3>
+<img class="shake" id="tre" src="../assets/images/tre.png" width="320" height="320">
+<img class="shake" id="mon" src="../assets/images/mon.png" width="320" height="320">
 <table id="results">
   <tr>
     <th>Total Revenue</th>
@@ -47,7 +77,7 @@
 
 <p>*If rates and rate levels remained untouched</p>
 <a href="Leaderboard.html">
-<img border="0" alt="Next" src="../assets/images/next.png" width="100" height="100">
+<img border="0" alt="Next" src="../assets/images/next.png" width="150" height="150">
 </a>
 
 <script src="https://sdk.amazonaws.com/js/aws-sdk-2.7.16.min.js"></script>

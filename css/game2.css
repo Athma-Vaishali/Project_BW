@@ -25,11 +25,13 @@
 .dropdown-content {
   display: none;
   position: absolute;
-  background-color: #b9eaff;
+  background-color: #B9EAFF;
   min-width: 550px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-  padding: 12px 16px;
+  padding: 5px 5px;
   z-index: 1;
+  border: 1.5px solid;
+  border-color: black;
 }
 
 .dropdown:hover .dropdown-content {
@@ -51,7 +53,7 @@ font-size: 14px;
 }
 
 #pricing td, #pricing th {
-border: 1px solid #ddd;
+border: 1px solid #8285C2;
 padding: 8px;
 }
 
@@ -76,7 +78,7 @@ box-sizing: border-box;
 
 .report_button {
 border: 2px;
-background-color: #668FF5;
+background-color: DodgerBlue;
 padding: 2px 2px;
 font-size: 14px;
 font-weight: bold;
@@ -115,7 +117,7 @@ border-collapse: collapse;
 }
 
 #Overall td, #Overall th {
-border: 1px solid #ddd;
+border: 1px solid #8285C2;
 padding: 4px;
 }
 
@@ -132,8 +134,10 @@ color: black;
 }
 
 .tool_button{
-  border: 2px;
-  background-color: #668FF5;
+  border: solid;
+  border-color: black;
+  background-color: #ADFDE0;
+  font-family: sans-serif;
   padding: 7px 14px;
   font-size: 16px;
   cursor: pointer;
@@ -149,7 +153,7 @@ font-size: 14px;
 }
 
 #compare td, #compare th {
-border: 1px solid #ddd;
+border: 1px solid #A4A8FA;
 padding: 8px;
 }
 
@@ -165,6 +169,18 @@ background-color: #8285C2;
 color: black;
 }
 
+#RLselector,#RTselector,#RLrack,#RLlast,#RLopaque,#RLgov{
+  background-color: #ADFDE0;
+  font-family: sans-serif;
+  font-size: 14px;
+  border: 2px solid;
+  border-color: black;
+}
+
+.simg{
+  border: .5px solid;
+  border-color: black;
+}
 
 #time{
   position: absolute;
@@ -186,6 +202,7 @@ color: black;
   left: 1300px;
   top: 10px;
 }
+
 
 #road{
   position: absolute;
@@ -437,7 +454,7 @@ color: black;
 .rectangle {
 height: 25px;
 width: 1200px;
-background-color: #B13E69;
+background-color: #CA1D5E;
 position: absolute;
 left: 55px;
 top: 610px;
@@ -450,7 +467,7 @@ top: 610px;
 width: 0;
 height: 0;
 border-top: 25px solid transparent;
-border-left: 50px solid #B13E69;
+border-left: 50px solid #CA1D5E;
 border-bottom: 25px solid transparent;
 }
 

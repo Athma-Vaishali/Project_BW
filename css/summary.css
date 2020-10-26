@@ -4,14 +4,14 @@ h3{
   color: #EFD4A6;
   position: absolute;
   font-size: 25px;
-  left: 520px;
-  top: 75px;
+  left: 450px;
+  top: 105px;
   }
 
 #results{
   position:absolute;
-  left:410px;
-  top:150px;
+  left:450px;
+  top:185px;
   font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
   border-collapse: collapse;
 }
@@ -40,6 +40,6 @@ span{
 p{
   color: #B13E69;
   position: absolute;
-  left:410px;
-  top:470px;
+  left:450px;
+  top:490px;
 }

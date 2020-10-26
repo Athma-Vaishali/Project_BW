@@ -263,6 +263,8 @@
 
 
   function display(){
+    rate_type= document.getElementById("RTselector").value;
+
     document.getElementById('K_last').innerHTML="$82";
     document.getElementById('Q_last').innerHTML="$86";
     document.getElementById('S_last').innerHTML="$95";
@@ -295,8 +297,7 @@
     document.getElementById("ns").innerHTML="$14";
     document.getElementById("adr").innerHTML="$87.36";
 
-
-    document.getElementById("rb1").addEventListener("click", () => {
+  if(rate_type=="King"){
       document.getElementById("t1-11").innerHTML="$91";
       document.getElementById("t1-21").innerHTML="$82";
       document.getElementById("t1-31").innerHTML="$60";
@@ -315,8 +316,8 @@
       document.getElementById("nr").innerHTML="$803";
       document.getElementById("ns").innerHTML="$14";
       document.getElementById("adr").innerHTML="$87.36";
-    });
-    document.getElementById("rb2").addEventListener("click", () => {
+     }
+    if(rate_type=="Queen"){
       document.getElementById("t1-11").innerHTML="$96";
       document.getElementById("t1-21").innerHTML="$86";
       document.getElementById("t1-31").innerHTML="$63";
@@ -335,8 +336,9 @@
       document.getElementById("nr").innerHTML="$758";
       document.getElementById("ns").innerHTML="$13";
       document.getElementById("adr").innerHTML="$88.31";
-    });
-    document.getElementById("rb3").addEventListener("click", () => {
+    }
+
+      if(rate_type=="Suite"){
       document.getElementById("t1-11").innerHTML="$106";
       document.getElementById("t1-21").innerHTML="$95";
       document.getElementById("t1-31").innerHTML="$70";
@@ -355,9 +357,9 @@
       document.getElementById("nr").innerHTML="$181";
       document.getElementById("ns").innerHTML="$3";
       document.getElementById("adr").innerHTML="$90.33";
-      });
+      }
 
-      document.getElementById("rb4").addEventListener("click", () => {
+  if(rate_type=="Entire"){
       document.getElementById("t1-11").innerHTML="$91/$96/$106";
       document.getElementById("t1-21").innerHTML="$82/$86/$95";
       document.getElementById("t1-31").innerHTML="$60/$63/$70";
@@ -375,7 +377,7 @@
       document.getElementById("nr").innerHTML="$1742";
       document.getElementById("ns").innerHTML="$30";
       document.getElementById("adr").innerHTML="$88.07";
-    });
+    }
   }
     </script>
 
@@ -582,6 +584,8 @@
       }
 
       function update_table1(){
+        updation();
+        rate_type= document.getElementById("RTselector").value;
 
         calc();
         document.getElementById("t1-11").innerHTML="$"+King_Rack;
@@ -603,7 +607,7 @@
         document.getElementById("ns").innerHTML="$"+K_ts;
         document.getElementById("adr").innerHTML="$"+K_adr;
 
-        document.getElementById("rb1").addEventListener("click", () => {
+        if(rate_type=="King"){
           calc();
           document.getElementById("t1-11").innerHTML="$"+King_Rack;
           document.getElementById("t1-21").innerHTML="$"+King_Last;
@@ -623,8 +627,8 @@
           document.getElementById("nr").innerHTML="$"+K_nr;
           document.getElementById("ns").innerHTML="$"+K_ts;
           document.getElementById("adr").innerHTML="$"+K_adr;
-        });
-        document.getElementById("rb2").addEventListener("click", () => {
+         }
+         if(rate_type=="Queen"){
           calc();
           document.getElementById("t1-11").innerHTML="$"+Queen_Rack;
           document.getElementById("t1-21").innerHTML="$"+Queen_Last;
@@ -644,8 +648,8 @@
           document.getElementById("nr").innerHTML="$"+Q_nr;
           document.getElementById("ns").innerHTML="$"+Q_ts;
           document.getElementById("adr").innerHTML="$"+Q_adr;
-        });
-        document.getElementById("rb3").addEventListener("click", () => {
+          }
+          if(rate_type=="Suite"){
           calc();
           document.getElementById("t1-11").innerHTML="$"+Suite_Rack;
           document.getElementById("t1-21").innerHTML="$"+Suite_Last;
@@ -665,9 +669,9 @@
           document.getElementById("nr").innerHTML="$"+S_nr;
           document.getElementById("ns").innerHTML="$"+S_ts;
           document.getElementById("adr").innerHTML="$"+S_adr;
-          });
+          }
 
-          document.getElementById("rb4").addEventListener("click", () => {
+        if(rate_type=="Entire"){
           calc();
           document.getElementById("t1-11").innerHTML="$"+King_Rack+"/$"+Queen_Rack+"/$"+Suite_Rack;
           document.getElementById("t1-21").innerHTML="$"+King_Last+"/$"+Queen_Last+"/$"+Suite_Last;
@@ -686,8 +690,7 @@
           document.getElementById("nr").innerHTML="$"+E_nr;
           document.getElementById("ns").innerHTML="$"+E_ts;
           document.getElementById("adr").innerHTML="$"+E_adr;
-
-        });
+          }
       }
 
 
@@ -1397,18 +1400,20 @@
     <div class="dropdown">
       <img id="report" border="0" alt="report" src="../assets/images/report.png" width="150" height="150"></img>
       <div id ="d2" class="dropdown-content">
+        <select id="RTselector" class="select" onchange="update_table1()">
+          <option value="King"><b>KING (40 Total)</b></option>
+          <option value="Queen"><b>QQ (30 Total)</b></option>
+          <option value="Suite"><b>SUITE QQ (10 Total)</b></option>
+          <option value="Entire"><b>ENTIRE HOTEL</b></option>
+        </select>
 
-        <button id="rb1" class=report_button> KING (40 Total)</button>
-        <button id="rb2" class=report_button> QQ (30 Total)</button>
-        <button id="rb3" class=report_button> SUITE QQ (10 Total)</button>
-        <button id="rb4" class=report_button> ENTIRE HOTEL</button><br>
         <br>
 
     <table id="pricing">
       <tr>
         <th>Rate Plan</th>
         <th>Current Rate</th>
-        <th>#Sold</th>
+        <th>Sold</th>
         <th>Revenue</th>
       </tr>
       <tr>
@@ -1465,12 +1470,6 @@
    <option value="Last Minute"><b>Last Minute</b></option>
    <option value="Opaque"><b>Opaque</b></option>
    <option value="Government"><b>Government</b></option>
- </select>
-
- <select id="RTselector" class="select" onchange="updation()">
-   <option value="King"><b>King</b></option>
-   <option value="Queen"><b>Queen</b></option>
-   <option value="Suite"><b>Suite QQ</b></option>
  </select>
 
     <table id="compare">
@@ -1549,16 +1548,16 @@
       <div id="d3" class="dropdown-content">
         <table>
           <tr>
-            <td><img id="i1" border="0" alt="view_history" src="../assets/images/Comp Logistics.png" width="320" height="120"></img></td>
-            <td rowspan="2"><img id="i2" border="0" alt="view_history" src="../assets/images/BestREV Forecast.png" width="200" height="275"></img></td>
-            <td rowspan="2"><img id="i3" border="0" alt="view_history" src="../assets/images/STR Report.png" width="220" height="220"></img></td>
+            <td><img id="i1" class="simg" border="0" alt="view_history" src="../assets/images/Comp Logistics.png" width="320" height="120"></img></td>
+            <td rowspan="2"><img id="i2" class="simg" border="0" alt="view_history" src="../assets/images/BestREV Forecast.png" width="200" height="275"></img></td>
+            <td rowspan="2"><img id="i3" class="simg" border="0" alt="view_history" src="../assets/images/STR Report.png" width="220" height="220"></img></td>
           </tr>
           <tr>
-            <td><img id="i4" border="0" alt="view_history" src="../assets/images/Comp Promos.png" width="320" height="120"></img></td>
+            <td><img id="i4" border="0" class="simg" alt="view_history" src="../assets/images/Comp Promos.png" width="320" height="120"></img></td>
           </tr>
           <tr>
-            <td colspan="2"><img id="i5" border="0" alt="view_history" src="../assets/images/OTA Insight.png" width="620" height="150"></img></td>
-            <td><img id="i6" border="0" alt="view_history" src="../assets/images/Room Type Sales.png" width="300" height="250"></img></td>
+            <td colspan="2"><img id="i5" class="simg" border="0" alt="view_history" src="../assets/images/OTA Insight.png" width="620" height="150"></img></td>
+            <td><img id="i6" border="0" class="simg" alt="view_history" src="../assets/images/Room Type Sales.png" width="300" height="250"></img></td>
         </table>
 
     </div>

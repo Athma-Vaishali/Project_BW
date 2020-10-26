@@ -19,7 +19,7 @@ var docClient = new AWS.DynamoDB.DocumentClient();
 var j=0,k=0;
 var net_r = new Array(100000);
 var details = new Array(200000);
-var first,second,third,fourth,fifth;
+var first,second,third,fourth,fifth,sixth,seventh,eighth,ninth,tenth;
 
 var params = {
     TableName: "Users",
@@ -33,7 +33,6 @@ function onScan(err, data) {
     if (err) {
         console.error("Unable to scan the table. Error JSON:", JSON.stringify(err, null, 2));
     } else {
-        // print all the movies
         console.log("Scan succeeded.");
         data.Items.forEach(function(user) {
           net_r[j]=user.net_rev;
@@ -43,8 +42,6 @@ function onScan(err, data) {
           k=k+2;
         });
 
-        // continue scanning if we have more movies, because
-        // scan can retrieve a maximum of 1MB of data
         if (typeof data.LastEvaluatedKey != "undefined") {
             console.log("Scanning for more...");
             params.ExclusiveStartKey = data.LastEvaluatedKey;
@@ -62,6 +59,16 @@ function onScan(err, data) {
         document.getElementById("44").innerHTML=fourth;
         fifth=net_r[j-5];
         document.getElementById("55").innerHTML=fifth;
+        sixth=net_r[j-6];
+        document.getElementById("66").innerHTML=sixth;
+        seventh=net_r[j-7];
+        document.getElementById("77").innerHTML=seventh;
+        eighth=net_r[j-8];
+        document.getElementById("88").innerHTML=eighth;
+        ninth=net_r[j-9];
+        document.getElementById("99").innerHTML=ninth;
+        tenth=net_r[j-10];
+        document.getElementById("100").innerHTML=tenth;
 
         for(var x=0;x<k;x++){
           if(details[x]==first){
@@ -74,6 +81,16 @@ function onScan(err, data) {
             document.getElementById("4").innerHTML=details[x+1];
           }else if (details[x]==fifth){
             document.getElementById("5").innerHTML=details[x+1];
+          }else if (details[x]==sixth){
+            document.getElementById("6").innerHTML=details[x+1];
+          }else if (details[x]==seventh){
+            document.getElementById("7").innerHTML=details[x+1];
+          }else if (details[x]==eighth){
+            document.getElementById("8").innerHTML=details[x+1];
+          }else if (details[x]==ninth){
+            document.getElementById("9").innerHTML=details[x+1];
+          }else if (details[x]==tenth){
+            document.getElementById("10").innerHTML=details[x+1];
           }
         }
       }
@@ -86,6 +103,7 @@ function onScan(err, data) {
 <div id="whole" class="content">
 
 <h2>LEADER BOARD</h2>
+<img class="shake" id="t1" src="../assets/images/t1.png" width="320" height="320">
 
   <table id="Leaderboard">
     <tr>
@@ -111,6 +129,26 @@ function onScan(err, data) {
     <tr>
       <td id="5"></td>
       <td id="55"></td>
+    </tr>
+    <tr>
+      <td id="6"></td>
+      <td id="66"></td>
+    </tr>
+    <tr>
+      <td id="7"></td>
+      <td id="77"></td>
+    </tr>
+    <tr>
+      <td id="8"></td>
+      <td id="88"></td>
+    </tr>
+    <tr>
+      <td id="9"></td>
+      <td id="99"></td>
+    </tr>
+    <tr>
+      <td id="10"></td>
+      <td id="100"></td>
     </tr>
   </table>
 

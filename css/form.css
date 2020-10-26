@@ -11,7 +11,7 @@
 
   input[type=text], select {
   width: 100%;
-  padding: 12px 20px;
+  padding: 10px 14px;
   margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
@@ -21,7 +21,7 @@
 
   input[type=number], select {
   width: 100%;
-  padding: 12px 20px;
+  padding: 10px 14px;
   margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
@@ -31,7 +31,7 @@
 
   input[type=email], select {
   width: 100%;
-  padding: 12px 20px;
+  padding: 10px 14px;
   margin: 8px 0;
   display: inline-block;
   border: 1px solid #ccc;
@@ -44,7 +44,7 @@
     border: none;
     width: 100%;
     color: white;
-    padding: 16px 32px;
+    padding: 12px 24px;
     text-align: center;
     text-decoration: none;
     display: inline-block;
@@ -73,5 +73,5 @@
   }
 
   h2{
-      left: 510px;
+      left: 450px;
   }
